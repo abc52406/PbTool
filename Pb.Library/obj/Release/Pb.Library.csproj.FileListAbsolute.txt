@@ -1,0 +1,10 @@
+E:\Project\PbTool\Pb.Library\bin\Release\Pb.Library.dll
+E:\Project\PbTool\Pb.Library\bin\Release\Pb.Library.pdb
+E:\Project\PbTool\Pb.Library\obj\Release\ResolveAssemblyReference.cache
+E:\Project\PbTool\Pb.Library\obj\Release\Pb.Library.dll
+E:\Project\PbTool\Pb.Library\obj\Release\Pb.Library.pdb
+D:\Studio\PbTool\Pb.Library\bin\Release\Pb.Library.dll
+D:\Studio\PbTool\Pb.Library\bin\Release\Pb.Library.pdb
+D:\Studio\PbTool\Pb.Library\obj\Release\ResolveAssemblyReference.cache
+D:\Studio\PbTool\Pb.Library\obj\Release\Pb.Library.dll
+D:\Studio\PbTool\Pb.Library\obj\Release\Pb.Library.pdb

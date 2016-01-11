@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Base>
+  <DataConnections>
+    <Connection Name="test">Data Source=10.10.1.10;Initial Catalog=test;User ID=test;Password=123.zxc</Connection>
+  </DataConnections>
+  <IPAddress>
+    <IP Name="Home" IPAddress="10.10.1.127" SubnetMask="255.255.255.0" DefaultIPGateway="10.10.1.252" DNSServerSearchOrder="10.10.1.249" DNSServerSpare="10.10.1.248" />
+  </IPAddress>
+  <ConfigAddress>
+    <Config Name="testconfig">
+      <Item Name="textconfig" Type="Text" DataBase="" Path="D:\test\Web.config" />
+      <Item Name="sqlconfig" Type="Sql" DataBase="test" Path="" />
+    </Config>
+  </ConfigAddress>
+  <Output>
+    <Item Name="testoutput" Table="testtable" DataBase="test" />
+  </Output>
+</Base>

@@ -29,39 +29,6 @@
         private void InitializeComponent()
         {
             this.MainContral = new System.Windows.Forms.TabControl();
-            this.IPChange = new System.Windows.Forms.TabPage();
-            this.btnIPAuto = new System.Windows.Forms.Button();
-            this.btnIPUse = new System.Windows.Forms.Button();
-            this.btnIPReplaceScheme = new System.Windows.Forms.Button();
-            this.btnIPDelete = new System.Windows.Forms.Button();
-            this.btnIPEdit = new System.Windows.Forms.Button();
-            this.btnIPAdd = new System.Windows.Forms.Button();
-            this.lblIPName = new System.Windows.Forms.Label();
-            this.tbxIPName = new System.Windows.Forms.TextBox();
-            this.lblDNSServerSpare = new System.Windows.Forms.Label();
-            this.tbxDNSServerSpare = new System.Windows.Forms.TextBox();
-            this.lblDNSServerSearchOrder = new System.Windows.Forms.Label();
-            this.tbxDNSServerSearchOrder = new System.Windows.Forms.TextBox();
-            this.lblDefaultIPGateWay = new System.Windows.Forms.Label();
-            this.tbxDefaultIPGateWay = new System.Windows.Forms.TextBox();
-            this.lblSubNetMask = new System.Windows.Forms.Label();
-            this.tbxSubNetMask = new System.Windows.Forms.TextBox();
-            this.lblIPAddress = new System.Windows.Forms.Label();
-            this.tbxIPAddress = new System.Windows.Forms.TextBox();
-            this.lblIPTree = new System.Windows.Forms.Label();
-            this.IPTree = new System.Windows.Forms.TreeView();
-            this.ConfigChange = new System.Windows.Forms.TabPage();
-            this.btnConfigText = new System.Windows.Forms.Button();
-            this.lblConfigIP = new System.Windows.Forms.Label();
-            this.tbxConfigIP = new System.Windows.Forms.TextBox();
-            this.btnConfigUse = new System.Windows.Forms.Button();
-            this.btnConfigDelete = new System.Windows.Forms.Button();
-            this.btnConfigEdit = new System.Windows.Forms.Button();
-            this.btnConfigAdd = new System.Windows.Forms.Button();
-            this.lblConfigName = new System.Windows.Forms.Label();
-            this.tbxConfigName = new System.Windows.Forms.TextBox();
-            this.lblConfigTree = new System.Windows.Forms.Label();
-            this.ConfigTree = new System.Windows.Forms.TreeView();
             this.OutputInsert = new System.Windows.Forms.TabPage();
             this.cbxOutputDelete = new System.Windows.Forms.CheckBox();
             this.tbxOutputDelete = new System.Windows.Forms.TextBox();
@@ -81,6 +48,7 @@
             this.OutputList = new System.Windows.Forms.ListBox();
             this.lblOutputSource = new System.Windows.Forms.Label();
             this.DataOper = new System.Windows.Forms.TabPage();
+            this.btnDataOperClearLog = new System.Windows.Forms.Button();
             this.gbxBak = new System.Windows.Forms.GroupBox();
             this.tbxBakPath = new System.Windows.Forms.TextBox();
             this.cbxBackUpDataBase = new System.Windows.Forms.CheckBox();
@@ -120,6 +88,17 @@
             this.lblTableFrom = new System.Windows.Forms.Label();
             this.SourceListFrom = new System.Windows.Forms.ComboBox();
             this.lblSourcesFrom = new System.Windows.Forms.Label();
+            this.CodeTemplete = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnCodeRun = new System.Windows.Forms.Button();
+            this.cbbCodeTemplete = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.tbxCodeOther = new System.Windows.Forms.TextBox();
+            this.cbbCodeDataTable = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.cbbCodeDataSource = new System.Windows.Forms.ComboBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.DocumentCopy = new System.Windows.Forms.TabPage();
             this.cbxReplaceFile = new System.Windows.Forms.CheckBox();
             this.gbxCopyDirectorys = new System.Windows.Forms.GroupBox();
@@ -150,14 +129,44 @@
             this.rbtDelKeepFile = new System.Windows.Forms.RadioButton();
             this.tbxDelTarget = new System.Windows.Forms.TextBox();
             this.lblDelTarget = new System.Windows.Forms.Label();
+            this.IPChange = new System.Windows.Forms.TabPage();
+            this.btnIPAuto = new System.Windows.Forms.Button();
+            this.btnIPUse = new System.Windows.Forms.Button();
+            this.btnIPReplaceScheme = new System.Windows.Forms.Button();
+            this.btnIPDelete = new System.Windows.Forms.Button();
+            this.btnIPEdit = new System.Windows.Forms.Button();
+            this.btnIPAdd = new System.Windows.Forms.Button();
+            this.lblIPName = new System.Windows.Forms.Label();
+            this.tbxIPName = new System.Windows.Forms.TextBox();
+            this.lblDNSServerSpare = new System.Windows.Forms.Label();
+            this.tbxDNSServerSpare = new System.Windows.Forms.TextBox();
+            this.lblDNSServerSearchOrder = new System.Windows.Forms.Label();
+            this.tbxDNSServerSearchOrder = new System.Windows.Forms.TextBox();
+            this.lblDefaultIPGateWay = new System.Windows.Forms.Label();
+            this.tbxDefaultIPGateWay = new System.Windows.Forms.TextBox();
+            this.lblSubNetMask = new System.Windows.Forms.Label();
+            this.tbxSubNetMask = new System.Windows.Forms.TextBox();
+            this.lblIPAddress = new System.Windows.Forms.Label();
+            this.tbxIPAddress = new System.Windows.Forms.TextBox();
+            this.lblIPTree = new System.Windows.Forms.Label();
+            this.IPTree = new System.Windows.Forms.TreeView();
+            this.ConfigChange = new System.Windows.Forms.TabPage();
+            this.btnConfigText = new System.Windows.Forms.Button();
+            this.lblConfigIP = new System.Windows.Forms.Label();
+            this.tbxConfigIP = new System.Windows.Forms.TextBox();
+            this.btnConfigUse = new System.Windows.Forms.Button();
+            this.btnConfigDelete = new System.Windows.Forms.Button();
+            this.btnConfigEdit = new System.Windows.Forms.Button();
+            this.btnConfigAdd = new System.Windows.Forms.Button();
+            this.lblConfigName = new System.Windows.Forms.Label();
+            this.tbxConfigName = new System.Windows.Forms.TextBox();
+            this.lblConfigTree = new System.Windows.Forms.Label();
+            this.ConfigTree = new System.Windows.Forms.TreeView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.常规ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.数据源ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnDataOperClearLog = new System.Windows.Forms.Button();
             this.MainContral.SuspendLayout();
-            this.IPChange.SuspendLayout();
-            this.ConfigChange.SuspendLayout();
             this.OutputInsert.SuspendLayout();
             this.DataOper.SuspendLayout();
             this.gbxBak.SuspendLayout();
@@ -168,6 +177,8 @@
             this.groupBoxData.SuspendLayout();
             this.groupBoxTo.SuspendLayout();
             this.groupBoxFrom.SuspendLayout();
+            this.CodeTemplete.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.DocumentCopy.SuspendLayout();
             this.gbxCopyDirectorys.SuspendLayout();
             this.gbxCopyFile.SuspendLayout();
@@ -175,347 +186,26 @@
             this.gbxDelRight.SuspendLayout();
             this.gbxDelDirectory.SuspendLayout();
             this.gbxDelFile.SuspendLayout();
+            this.IPChange.SuspendLayout();
+            this.ConfigChange.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainContral
             // 
-            this.MainContral.Controls.Add(this.IPChange);
-            this.MainContral.Controls.Add(this.ConfigChange);
             this.MainContral.Controls.Add(this.OutputInsert);
             this.MainContral.Controls.Add(this.DataOper);
             this.MainContral.Controls.Add(this.DataDiff);
+            this.MainContral.Controls.Add(this.CodeTemplete);
             this.MainContral.Controls.Add(this.DocumentCopy);
             this.MainContral.Controls.Add(this.DocumentDel);
+            this.MainContral.Controls.Add(this.IPChange);
+            this.MainContral.Controls.Add(this.ConfigChange);
             this.MainContral.Location = new System.Drawing.Point(1, 33);
             this.MainContral.Name = "MainContral";
             this.MainContral.SelectedIndex = 0;
             this.MainContral.Size = new System.Drawing.Size(824, 410);
             this.MainContral.TabIndex = 0;
-            // 
-            // IPChange
-            // 
-            this.IPChange.Controls.Add(this.btnIPAuto);
-            this.IPChange.Controls.Add(this.btnIPUse);
-            this.IPChange.Controls.Add(this.btnIPReplaceScheme);
-            this.IPChange.Controls.Add(this.btnIPDelete);
-            this.IPChange.Controls.Add(this.btnIPEdit);
-            this.IPChange.Controls.Add(this.btnIPAdd);
-            this.IPChange.Controls.Add(this.lblIPName);
-            this.IPChange.Controls.Add(this.tbxIPName);
-            this.IPChange.Controls.Add(this.lblDNSServerSpare);
-            this.IPChange.Controls.Add(this.tbxDNSServerSpare);
-            this.IPChange.Controls.Add(this.lblDNSServerSearchOrder);
-            this.IPChange.Controls.Add(this.tbxDNSServerSearchOrder);
-            this.IPChange.Controls.Add(this.lblDefaultIPGateWay);
-            this.IPChange.Controls.Add(this.tbxDefaultIPGateWay);
-            this.IPChange.Controls.Add(this.lblSubNetMask);
-            this.IPChange.Controls.Add(this.tbxSubNetMask);
-            this.IPChange.Controls.Add(this.lblIPAddress);
-            this.IPChange.Controls.Add(this.tbxIPAddress);
-            this.IPChange.Controls.Add(this.lblIPTree);
-            this.IPChange.Controls.Add(this.IPTree);
-            this.IPChange.Location = new System.Drawing.Point(4, 22);
-            this.IPChange.Name = "IPChange";
-            this.IPChange.Padding = new System.Windows.Forms.Padding(3);
-            this.IPChange.Size = new System.Drawing.Size(816, 384);
-            this.IPChange.TabIndex = 0;
-            this.IPChange.Text = "IP切换";
-            this.IPChange.UseVisualStyleBackColor = true;
-            // 
-            // btnIPAuto
-            // 
-            this.btnIPAuto.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnIPAuto.Location = new System.Drawing.Point(573, 333);
-            this.btnIPAuto.Name = "btnIPAuto";
-            this.btnIPAuto.Size = new System.Drawing.Size(92, 26);
-            this.btnIPAuto.TabIndex = 19;
-            this.btnIPAuto.Text = "自动获取IP";
-            this.btnIPAuto.UseVisualStyleBackColor = true;
-            this.btnIPAuto.Click += new System.EventHandler(this.btnIPAuto_Click);
-            // 
-            // btnIPUse
-            // 
-            this.btnIPUse.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnIPUse.Location = new System.Drawing.Point(355, 322);
-            this.btnIPUse.Name = "btnIPUse";
-            this.btnIPUse.Size = new System.Drawing.Size(92, 43);
-            this.btnIPUse.TabIndex = 18;
-            this.btnIPUse.Text = "应用";
-            this.btnIPUse.UseVisualStyleBackColor = true;
-            this.btnIPUse.Click += new System.EventHandler(this.btnIPUse_Click);
-            // 
-            // btnIPReplaceScheme
-            // 
-            this.btnIPReplaceScheme.Location = new System.Drawing.Point(647, 277);
-            this.btnIPReplaceScheme.Name = "btnIPReplaceScheme";
-            this.btnIPReplaceScheme.Size = new System.Drawing.Size(75, 23);
-            this.btnIPReplaceScheme.TabIndex = 17;
-            this.btnIPReplaceScheme.Text = "替换方案";
-            this.btnIPReplaceScheme.UseVisualStyleBackColor = true;
-            // 
-            // btnIPDelete
-            // 
-            this.btnIPDelete.Location = new System.Drawing.Point(516, 277);
-            this.btnIPDelete.Name = "btnIPDelete";
-            this.btnIPDelete.Size = new System.Drawing.Size(75, 23);
-            this.btnIPDelete.TabIndex = 16;
-            this.btnIPDelete.Text = "删除";
-            this.btnIPDelete.UseVisualStyleBackColor = true;
-            this.btnIPDelete.Click += new System.EventHandler(this.btnIPDelete_Click);
-            // 
-            // btnIPEdit
-            // 
-            this.btnIPEdit.Location = new System.Drawing.Point(389, 277);
-            this.btnIPEdit.Name = "btnIPEdit";
-            this.btnIPEdit.Size = new System.Drawing.Size(75, 23);
-            this.btnIPEdit.TabIndex = 15;
-            this.btnIPEdit.Text = "修改";
-            this.btnIPEdit.UseVisualStyleBackColor = true;
-            this.btnIPEdit.Click += new System.EventHandler(this.btnIPEdit_Click);
-            // 
-            // btnIPAdd
-            // 
-            this.btnIPAdd.Location = new System.Drawing.Point(264, 277);
-            this.btnIPAdd.Name = "btnIPAdd";
-            this.btnIPAdd.Size = new System.Drawing.Size(75, 23);
-            this.btnIPAdd.TabIndex = 14;
-            this.btnIPAdd.Text = "添加";
-            this.btnIPAdd.UseVisualStyleBackColor = true;
-            this.btnIPAdd.Click += new System.EventHandler(this.btnIPAdd_Click);
-            // 
-            // lblIPName
-            // 
-            this.lblIPName.AutoSize = true;
-            this.lblIPName.Location = new System.Drawing.Point(216, 42);
-            this.lblIPName.Name = "lblIPName";
-            this.lblIPName.Size = new System.Drawing.Size(29, 12);
-            this.lblIPName.TabIndex = 13;
-            this.lblIPName.Text = "名称";
-            // 
-            // tbxIPName
-            // 
-            this.tbxIPName.Location = new System.Drawing.Point(309, 39);
-            this.tbxIPName.Name = "tbxIPName";
-            this.tbxIPName.Size = new System.Drawing.Size(470, 21);
-            this.tbxIPName.TabIndex = 12;
-            // 
-            // lblDNSServerSpare
-            // 
-            this.lblDNSServerSpare.AutoSize = true;
-            this.lblDNSServerSpare.Location = new System.Drawing.Point(216, 229);
-            this.lblDNSServerSpare.Name = "lblDNSServerSpare";
-            this.lblDNSServerSpare.Size = new System.Drawing.Size(83, 12);
-            this.lblDNSServerSpare.TabIndex = 11;
-            this.lblDNSServerSpare.Text = "备用DNS服务器";
-            // 
-            // tbxDNSServerSpare
-            // 
-            this.tbxDNSServerSpare.Location = new System.Drawing.Point(309, 226);
-            this.tbxDNSServerSpare.Name = "tbxDNSServerSpare";
-            this.tbxDNSServerSpare.Size = new System.Drawing.Size(470, 21);
-            this.tbxDNSServerSpare.TabIndex = 10;
-            // 
-            // lblDNSServerSearchOrder
-            // 
-            this.lblDNSServerSearchOrder.AutoSize = true;
-            this.lblDNSServerSearchOrder.Location = new System.Drawing.Point(216, 193);
-            this.lblDNSServerSearchOrder.Name = "lblDNSServerSearchOrder";
-            this.lblDNSServerSearchOrder.Size = new System.Drawing.Size(83, 12);
-            this.lblDNSServerSearchOrder.TabIndex = 9;
-            this.lblDNSServerSearchOrder.Text = "首选DNS服务器";
-            // 
-            // tbxDNSServerSearchOrder
-            // 
-            this.tbxDNSServerSearchOrder.Location = new System.Drawing.Point(309, 190);
-            this.tbxDNSServerSearchOrder.Name = "tbxDNSServerSearchOrder";
-            this.tbxDNSServerSearchOrder.Size = new System.Drawing.Size(470, 21);
-            this.tbxDNSServerSearchOrder.TabIndex = 8;
-            // 
-            // lblDefaultIPGateWay
-            // 
-            this.lblDefaultIPGateWay.AutoSize = true;
-            this.lblDefaultIPGateWay.Location = new System.Drawing.Point(216, 157);
-            this.lblDefaultIPGateWay.Name = "lblDefaultIPGateWay";
-            this.lblDefaultIPGateWay.Size = new System.Drawing.Size(53, 12);
-            this.lblDefaultIPGateWay.TabIndex = 7;
-            this.lblDefaultIPGateWay.Text = "默认网关";
-            // 
-            // tbxDefaultIPGateWay
-            // 
-            this.tbxDefaultIPGateWay.Location = new System.Drawing.Point(309, 154);
-            this.tbxDefaultIPGateWay.Name = "tbxDefaultIPGateWay";
-            this.tbxDefaultIPGateWay.Size = new System.Drawing.Size(470, 21);
-            this.tbxDefaultIPGateWay.TabIndex = 6;
-            // 
-            // lblSubNetMask
-            // 
-            this.lblSubNetMask.AutoSize = true;
-            this.lblSubNetMask.Location = new System.Drawing.Point(216, 120);
-            this.lblSubNetMask.Name = "lblSubNetMask";
-            this.lblSubNetMask.Size = new System.Drawing.Size(53, 12);
-            this.lblSubNetMask.TabIndex = 5;
-            this.lblSubNetMask.Text = "子网掩码";
-            // 
-            // tbxSubNetMask
-            // 
-            this.tbxSubNetMask.Location = new System.Drawing.Point(309, 117);
-            this.tbxSubNetMask.Name = "tbxSubNetMask";
-            this.tbxSubNetMask.Size = new System.Drawing.Size(470, 21);
-            this.tbxSubNetMask.TabIndex = 4;
-            // 
-            // lblIPAddress
-            // 
-            this.lblIPAddress.AutoSize = true;
-            this.lblIPAddress.Location = new System.Drawing.Point(216, 82);
-            this.lblIPAddress.Name = "lblIPAddress";
-            this.lblIPAddress.Size = new System.Drawing.Size(41, 12);
-            this.lblIPAddress.TabIndex = 3;
-            this.lblIPAddress.Text = "IP地址";
-            // 
-            // tbxIPAddress
-            // 
-            this.tbxIPAddress.Location = new System.Drawing.Point(309, 79);
-            this.tbxIPAddress.Name = "tbxIPAddress";
-            this.tbxIPAddress.Size = new System.Drawing.Size(470, 21);
-            this.tbxIPAddress.TabIndex = 2;
-            // 
-            // lblIPTree
-            // 
-            this.lblIPTree.AutoSize = true;
-            this.lblIPTree.Location = new System.Drawing.Point(63, 15);
-            this.lblIPTree.Name = "lblIPTree";
-            this.lblIPTree.Size = new System.Drawing.Size(41, 12);
-            this.lblIPTree.TabIndex = 1;
-            this.lblIPTree.Text = "IP方案";
-            // 
-            // IPTree
-            // 
-            this.IPTree.Location = new System.Drawing.Point(0, 39);
-            this.IPTree.Name = "IPTree";
-            this.IPTree.Size = new System.Drawing.Size(176, 345);
-            this.IPTree.TabIndex = 0;
-            this.IPTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.IPTree_AfterSelect);
-            // 
-            // ConfigChange
-            // 
-            this.ConfigChange.Controls.Add(this.btnConfigText);
-            this.ConfigChange.Controls.Add(this.lblConfigIP);
-            this.ConfigChange.Controls.Add(this.tbxConfigIP);
-            this.ConfigChange.Controls.Add(this.btnConfigUse);
-            this.ConfigChange.Controls.Add(this.btnConfigDelete);
-            this.ConfigChange.Controls.Add(this.btnConfigEdit);
-            this.ConfigChange.Controls.Add(this.btnConfigAdd);
-            this.ConfigChange.Controls.Add(this.lblConfigName);
-            this.ConfigChange.Controls.Add(this.tbxConfigName);
-            this.ConfigChange.Controls.Add(this.lblConfigTree);
-            this.ConfigChange.Controls.Add(this.ConfigTree);
-            this.ConfigChange.Location = new System.Drawing.Point(4, 22);
-            this.ConfigChange.Name = "ConfigChange";
-            this.ConfigChange.Padding = new System.Windows.Forms.Padding(3);
-            this.ConfigChange.Size = new System.Drawing.Size(816, 384);
-            this.ConfigChange.TabIndex = 1;
-            this.ConfigChange.Text = "配置切换";
-            this.ConfigChange.UseVisualStyleBackColor = true;
-            // 
-            // btnConfigText
-            // 
-            this.btnConfigText.Location = new System.Drawing.Point(701, 76);
-            this.btnConfigText.Name = "btnConfigText";
-            this.btnConfigText.Size = new System.Drawing.Size(75, 23);
-            this.btnConfigText.TabIndex = 26;
-            this.btnConfigText.Text = "维护明细";
-            this.btnConfigText.UseVisualStyleBackColor = true;
-            this.btnConfigText.Click += new System.EventHandler(this.btnConfigText_Click);
-            // 
-            // lblConfigIP
-            // 
-            this.lblConfigIP.AutoSize = true;
-            this.lblConfigIP.Location = new System.Drawing.Point(230, 264);
-            this.lblConfigIP.Name = "lblConfigIP";
-            this.lblConfigIP.Size = new System.Drawing.Size(17, 12);
-            this.lblConfigIP.TabIndex = 25;
-            this.lblConfigIP.Text = "IP";
-            // 
-            // tbxConfigIP
-            // 
-            this.tbxConfigIP.Location = new System.Drawing.Point(274, 264);
-            this.tbxConfigIP.Name = "tbxConfigIP";
-            this.tbxConfigIP.Size = new System.Drawing.Size(508, 21);
-            this.tbxConfigIP.TabIndex = 24;
-            // 
-            // btnConfigUse
-            // 
-            this.btnConfigUse.Location = new System.Drawing.Point(490, 308);
-            this.btnConfigUse.Name = "btnConfigUse";
-            this.btnConfigUse.Size = new System.Drawing.Size(75, 23);
-            this.btnConfigUse.TabIndex = 23;
-            this.btnConfigUse.Text = "应用";
-            this.btnConfigUse.UseVisualStyleBackColor = true;
-            this.btnConfigUse.Click += new System.EventHandler(this.btnConfigUse_Click);
-            // 
-            // btnConfigDelete
-            // 
-            this.btnConfigDelete.Location = new System.Drawing.Point(555, 76);
-            this.btnConfigDelete.Name = "btnConfigDelete";
-            this.btnConfigDelete.Size = new System.Drawing.Size(75, 23);
-            this.btnConfigDelete.TabIndex = 22;
-            this.btnConfigDelete.Text = "删除方案";
-            this.btnConfigDelete.UseVisualStyleBackColor = true;
-            this.btnConfigDelete.Click += new System.EventHandler(this.btnConfigDelete_Click);
-            // 
-            // btnConfigEdit
-            // 
-            this.btnConfigEdit.Location = new System.Drawing.Point(411, 76);
-            this.btnConfigEdit.Name = "btnConfigEdit";
-            this.btnConfigEdit.Size = new System.Drawing.Size(75, 23);
-            this.btnConfigEdit.TabIndex = 21;
-            this.btnConfigEdit.Text = "修改方案";
-            this.btnConfigEdit.UseVisualStyleBackColor = true;
-            this.btnConfigEdit.Click += new System.EventHandler(this.btnConfigEdit_Click);
-            // 
-            // btnConfigAdd
-            // 
-            this.btnConfigAdd.Location = new System.Drawing.Point(277, 76);
-            this.btnConfigAdd.Name = "btnConfigAdd";
-            this.btnConfigAdd.Size = new System.Drawing.Size(75, 23);
-            this.btnConfigAdd.TabIndex = 20;
-            this.btnConfigAdd.Text = "添加方案";
-            this.btnConfigAdd.UseVisualStyleBackColor = true;
-            this.btnConfigAdd.Click += new System.EventHandler(this.btnConfigAdd_Click);
-            // 
-            // lblConfigName
-            // 
-            this.lblConfigName.AutoSize = true;
-            this.lblConfigName.Location = new System.Drawing.Point(230, 36);
-            this.lblConfigName.Name = "lblConfigName";
-            this.lblConfigName.Size = new System.Drawing.Size(29, 12);
-            this.lblConfigName.TabIndex = 19;
-            this.lblConfigName.Text = "名称";
-            // 
-            // tbxConfigName
-            // 
-            this.tbxConfigName.Location = new System.Drawing.Point(274, 33);
-            this.tbxConfigName.Name = "tbxConfigName";
-            this.tbxConfigName.Size = new System.Drawing.Size(508, 21);
-            this.tbxConfigName.TabIndex = 18;
-            // 
-            // lblConfigTree
-            // 
-            this.lblConfigTree.AutoSize = true;
-            this.lblConfigTree.Location = new System.Drawing.Point(70, 9);
-            this.lblConfigTree.Name = "lblConfigTree";
-            this.lblConfigTree.Size = new System.Drawing.Size(53, 12);
-            this.lblConfigTree.TabIndex = 3;
-            this.lblConfigTree.Text = "配置方案";
-            // 
-            // ConfigTree
-            // 
-            this.ConfigTree.Location = new System.Drawing.Point(7, 33);
-            this.ConfigTree.Name = "ConfigTree";
-            this.ConfigTree.Size = new System.Drawing.Size(176, 345);
-            this.ConfigTree.TabIndex = 2;
-            this.ConfigTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.ConfigTree_AfterSelect);
             // 
             // OutputInsert
             // 
@@ -715,6 +405,16 @@
             this.DataOper.TabIndex = 3;
             this.DataOper.Text = "数据库操作";
             this.DataOper.UseVisualStyleBackColor = true;
+            // 
+            // btnDataOperClearLog
+            // 
+            this.btnDataOperClearLog.Location = new System.Drawing.Point(700, 59);
+            this.btnDataOperClearLog.Name = "btnDataOperClearLog";
+            this.btnDataOperClearLog.Size = new System.Drawing.Size(75, 23);
+            this.btnDataOperClearLog.TabIndex = 17;
+            this.btnDataOperClearLog.Text = "清除日志";
+            this.btnDataOperClearLog.UseVisualStyleBackColor = true;
+            this.btnDataOperClearLog.Click += new System.EventHandler(this.btnDataOperClearLog_Click);
             // 
             // gbxBak
             // 
@@ -1122,6 +822,117 @@
             this.lblSourcesFrom.TabIndex = 1;
             this.lblSourcesFrom.Text = "数据源";
             // 
+            // CodeTemplete
+            // 
+            this.CodeTemplete.Controls.Add(this.groupBox1);
+            this.CodeTemplete.Location = new System.Drawing.Point(4, 22);
+            this.CodeTemplete.Name = "CodeTemplete";
+            this.CodeTemplete.Padding = new System.Windows.Forms.Padding(3);
+            this.CodeTemplete.Size = new System.Drawing.Size(816, 384);
+            this.CodeTemplete.TabIndex = 7;
+            this.CodeTemplete.Text = "代码生成器";
+            this.CodeTemplete.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.btnCodeRun);
+            this.groupBox1.Controls.Add(this.cbbCodeTemplete);
+            this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.tbxCodeOther);
+            this.groupBox1.Controls.Add(this.cbbCodeDataTable);
+            this.groupBox1.Controls.Add(this.label8);
+            this.groupBox1.Controls.Add(this.cbbCodeDataSource);
+            this.groupBox1.Controls.Add(this.label9);
+            this.groupBox1.Location = new System.Drawing.Point(62, 32);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(689, 345);
+            this.groupBox1.TabIndex = 7;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "原始数据";
+            // 
+            // btnCodeRun
+            // 
+            this.btnCodeRun.Location = new System.Drawing.Point(298, 303);
+            this.btnCodeRun.Name = "btnCodeRun";
+            this.btnCodeRun.Size = new System.Drawing.Size(75, 23);
+            this.btnCodeRun.TabIndex = 18;
+            this.btnCodeRun.Text = "执行";
+            this.btnCodeRun.UseVisualStyleBackColor = true;
+            this.btnCodeRun.Click += new System.EventHandler(this.btnCodeRun_Click);
+            // 
+            // cbbCodeTemplete
+            // 
+            this.cbbCodeTemplete.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbCodeTemplete.FormattingEnabled = true;
+            this.cbbCodeTemplete.Location = new System.Drawing.Point(95, 20);
+            this.cbbCodeTemplete.Name = "cbbCodeTemplete";
+            this.cbbCodeTemplete.Size = new System.Drawing.Size(550, 20);
+            this.cbbCodeTemplete.TabIndex = 17;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(13, 23);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(29, 12);
+            this.label6.TabIndex = 16;
+            this.label6.Text = "模板";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(13, 190);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(77, 12);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "其它替换内容";
+            // 
+            // tbxCodeOther
+            // 
+            this.tbxCodeOther.Location = new System.Drawing.Point(95, 135);
+            this.tbxCodeOther.Multiline = true;
+            this.tbxCodeOther.Name = "tbxCodeOther";
+            this.tbxCodeOther.Size = new System.Drawing.Size(550, 148);
+            this.tbxCodeOther.TabIndex = 13;
+            // 
+            // cbbCodeDataTable
+            // 
+            this.cbbCodeDataTable.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbCodeDataTable.FormattingEnabled = true;
+            this.cbbCodeDataTable.Location = new System.Drawing.Point(95, 91);
+            this.cbbCodeDataTable.Name = "cbbCodeDataTable";
+            this.cbbCodeDataTable.Size = new System.Drawing.Size(550, 20);
+            this.cbbCodeDataTable.TabIndex = 4;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(13, 94);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(17, 12);
+            this.label8.TabIndex = 3;
+            this.label8.Text = "表";
+            // 
+            // cbbCodeDataSource
+            // 
+            this.cbbCodeDataSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbCodeDataSource.FormattingEnabled = true;
+            this.cbbCodeDataSource.Location = new System.Drawing.Point(95, 55);
+            this.cbbCodeDataSource.Name = "cbbCodeDataSource";
+            this.cbbCodeDataSource.Size = new System.Drawing.Size(550, 20);
+            this.cbbCodeDataSource.TabIndex = 2;
+            this.cbbCodeDataSource.SelectedIndexChanged += new System.EventHandler(this.cbbCodeDataSource_SelectedIndexChanged);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(13, 58);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(41, 12);
+            this.label9.TabIndex = 1;
+            this.label9.Text = "数据源";
+            // 
             // DocumentCopy
             // 
             this.DocumentCopy.Controls.Add(this.cbxReplaceFile);
@@ -1434,6 +1245,330 @@
             this.lblDelTarget.TabIndex = 12;
             this.lblDelTarget.Text = "目标";
             // 
+            // IPChange
+            // 
+            this.IPChange.Controls.Add(this.btnIPAuto);
+            this.IPChange.Controls.Add(this.btnIPUse);
+            this.IPChange.Controls.Add(this.btnIPReplaceScheme);
+            this.IPChange.Controls.Add(this.btnIPDelete);
+            this.IPChange.Controls.Add(this.btnIPEdit);
+            this.IPChange.Controls.Add(this.btnIPAdd);
+            this.IPChange.Controls.Add(this.lblIPName);
+            this.IPChange.Controls.Add(this.tbxIPName);
+            this.IPChange.Controls.Add(this.lblDNSServerSpare);
+            this.IPChange.Controls.Add(this.tbxDNSServerSpare);
+            this.IPChange.Controls.Add(this.lblDNSServerSearchOrder);
+            this.IPChange.Controls.Add(this.tbxDNSServerSearchOrder);
+            this.IPChange.Controls.Add(this.lblDefaultIPGateWay);
+            this.IPChange.Controls.Add(this.tbxDefaultIPGateWay);
+            this.IPChange.Controls.Add(this.lblSubNetMask);
+            this.IPChange.Controls.Add(this.tbxSubNetMask);
+            this.IPChange.Controls.Add(this.lblIPAddress);
+            this.IPChange.Controls.Add(this.tbxIPAddress);
+            this.IPChange.Controls.Add(this.lblIPTree);
+            this.IPChange.Controls.Add(this.IPTree);
+            this.IPChange.Location = new System.Drawing.Point(4, 22);
+            this.IPChange.Name = "IPChange";
+            this.IPChange.Padding = new System.Windows.Forms.Padding(3);
+            this.IPChange.Size = new System.Drawing.Size(816, 384);
+            this.IPChange.TabIndex = 0;
+            this.IPChange.Text = "IP切换";
+            this.IPChange.UseVisualStyleBackColor = true;
+            // 
+            // btnIPAuto
+            // 
+            this.btnIPAuto.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnIPAuto.Location = new System.Drawing.Point(573, 333);
+            this.btnIPAuto.Name = "btnIPAuto";
+            this.btnIPAuto.Size = new System.Drawing.Size(92, 26);
+            this.btnIPAuto.TabIndex = 19;
+            this.btnIPAuto.Text = "自动获取IP";
+            this.btnIPAuto.UseVisualStyleBackColor = true;
+            this.btnIPAuto.Click += new System.EventHandler(this.btnIPAuto_Click);
+            // 
+            // btnIPUse
+            // 
+            this.btnIPUse.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnIPUse.Location = new System.Drawing.Point(355, 322);
+            this.btnIPUse.Name = "btnIPUse";
+            this.btnIPUse.Size = new System.Drawing.Size(92, 43);
+            this.btnIPUse.TabIndex = 18;
+            this.btnIPUse.Text = "应用";
+            this.btnIPUse.UseVisualStyleBackColor = true;
+            this.btnIPUse.Click += new System.EventHandler(this.btnIPUse_Click);
+            // 
+            // btnIPReplaceScheme
+            // 
+            this.btnIPReplaceScheme.Location = new System.Drawing.Point(647, 277);
+            this.btnIPReplaceScheme.Name = "btnIPReplaceScheme";
+            this.btnIPReplaceScheme.Size = new System.Drawing.Size(75, 23);
+            this.btnIPReplaceScheme.TabIndex = 17;
+            this.btnIPReplaceScheme.Text = "替换方案";
+            this.btnIPReplaceScheme.UseVisualStyleBackColor = true;
+            // 
+            // btnIPDelete
+            // 
+            this.btnIPDelete.Location = new System.Drawing.Point(516, 277);
+            this.btnIPDelete.Name = "btnIPDelete";
+            this.btnIPDelete.Size = new System.Drawing.Size(75, 23);
+            this.btnIPDelete.TabIndex = 16;
+            this.btnIPDelete.Text = "删除";
+            this.btnIPDelete.UseVisualStyleBackColor = true;
+            this.btnIPDelete.Click += new System.EventHandler(this.btnIPDelete_Click);
+            // 
+            // btnIPEdit
+            // 
+            this.btnIPEdit.Location = new System.Drawing.Point(389, 277);
+            this.btnIPEdit.Name = "btnIPEdit";
+            this.btnIPEdit.Size = new System.Drawing.Size(75, 23);
+            this.btnIPEdit.TabIndex = 15;
+            this.btnIPEdit.Text = "修改";
+            this.btnIPEdit.UseVisualStyleBackColor = true;
+            this.btnIPEdit.Click += new System.EventHandler(this.btnIPEdit_Click);
+            // 
+            // btnIPAdd
+            // 
+            this.btnIPAdd.Location = new System.Drawing.Point(264, 277);
+            this.btnIPAdd.Name = "btnIPAdd";
+            this.btnIPAdd.Size = new System.Drawing.Size(75, 23);
+            this.btnIPAdd.TabIndex = 14;
+            this.btnIPAdd.Text = "添加";
+            this.btnIPAdd.UseVisualStyleBackColor = true;
+            this.btnIPAdd.Click += new System.EventHandler(this.btnIPAdd_Click);
+            // 
+            // lblIPName
+            // 
+            this.lblIPName.AutoSize = true;
+            this.lblIPName.Location = new System.Drawing.Point(216, 42);
+            this.lblIPName.Name = "lblIPName";
+            this.lblIPName.Size = new System.Drawing.Size(29, 12);
+            this.lblIPName.TabIndex = 13;
+            this.lblIPName.Text = "名称";
+            // 
+            // tbxIPName
+            // 
+            this.tbxIPName.Location = new System.Drawing.Point(309, 39);
+            this.tbxIPName.Name = "tbxIPName";
+            this.tbxIPName.Size = new System.Drawing.Size(470, 21);
+            this.tbxIPName.TabIndex = 12;
+            // 
+            // lblDNSServerSpare
+            // 
+            this.lblDNSServerSpare.AutoSize = true;
+            this.lblDNSServerSpare.Location = new System.Drawing.Point(216, 229);
+            this.lblDNSServerSpare.Name = "lblDNSServerSpare";
+            this.lblDNSServerSpare.Size = new System.Drawing.Size(83, 12);
+            this.lblDNSServerSpare.TabIndex = 11;
+            this.lblDNSServerSpare.Text = "备用DNS服务器";
+            // 
+            // tbxDNSServerSpare
+            // 
+            this.tbxDNSServerSpare.Location = new System.Drawing.Point(309, 226);
+            this.tbxDNSServerSpare.Name = "tbxDNSServerSpare";
+            this.tbxDNSServerSpare.Size = new System.Drawing.Size(470, 21);
+            this.tbxDNSServerSpare.TabIndex = 10;
+            // 
+            // lblDNSServerSearchOrder
+            // 
+            this.lblDNSServerSearchOrder.AutoSize = true;
+            this.lblDNSServerSearchOrder.Location = new System.Drawing.Point(216, 193);
+            this.lblDNSServerSearchOrder.Name = "lblDNSServerSearchOrder";
+            this.lblDNSServerSearchOrder.Size = new System.Drawing.Size(83, 12);
+            this.lblDNSServerSearchOrder.TabIndex = 9;
+            this.lblDNSServerSearchOrder.Text = "首选DNS服务器";
+            // 
+            // tbxDNSServerSearchOrder
+            // 
+            this.tbxDNSServerSearchOrder.Location = new System.Drawing.Point(309, 190);
+            this.tbxDNSServerSearchOrder.Name = "tbxDNSServerSearchOrder";
+            this.tbxDNSServerSearchOrder.Size = new System.Drawing.Size(470, 21);
+            this.tbxDNSServerSearchOrder.TabIndex = 8;
+            // 
+            // lblDefaultIPGateWay
+            // 
+            this.lblDefaultIPGateWay.AutoSize = true;
+            this.lblDefaultIPGateWay.Location = new System.Drawing.Point(216, 157);
+            this.lblDefaultIPGateWay.Name = "lblDefaultIPGateWay";
+            this.lblDefaultIPGateWay.Size = new System.Drawing.Size(53, 12);
+            this.lblDefaultIPGateWay.TabIndex = 7;
+            this.lblDefaultIPGateWay.Text = "默认网关";
+            // 
+            // tbxDefaultIPGateWay
+            // 
+            this.tbxDefaultIPGateWay.Location = new System.Drawing.Point(309, 154);
+            this.tbxDefaultIPGateWay.Name = "tbxDefaultIPGateWay";
+            this.tbxDefaultIPGateWay.Size = new System.Drawing.Size(470, 21);
+            this.tbxDefaultIPGateWay.TabIndex = 6;
+            // 
+            // lblSubNetMask
+            // 
+            this.lblSubNetMask.AutoSize = true;
+            this.lblSubNetMask.Location = new System.Drawing.Point(216, 120);
+            this.lblSubNetMask.Name = "lblSubNetMask";
+            this.lblSubNetMask.Size = new System.Drawing.Size(53, 12);
+            this.lblSubNetMask.TabIndex = 5;
+            this.lblSubNetMask.Text = "子网掩码";
+            // 
+            // tbxSubNetMask
+            // 
+            this.tbxSubNetMask.Location = new System.Drawing.Point(309, 117);
+            this.tbxSubNetMask.Name = "tbxSubNetMask";
+            this.tbxSubNetMask.Size = new System.Drawing.Size(470, 21);
+            this.tbxSubNetMask.TabIndex = 4;
+            // 
+            // lblIPAddress
+            // 
+            this.lblIPAddress.AutoSize = true;
+            this.lblIPAddress.Location = new System.Drawing.Point(216, 82);
+            this.lblIPAddress.Name = "lblIPAddress";
+            this.lblIPAddress.Size = new System.Drawing.Size(41, 12);
+            this.lblIPAddress.TabIndex = 3;
+            this.lblIPAddress.Text = "IP地址";
+            // 
+            // tbxIPAddress
+            // 
+            this.tbxIPAddress.Location = new System.Drawing.Point(309, 79);
+            this.tbxIPAddress.Name = "tbxIPAddress";
+            this.tbxIPAddress.Size = new System.Drawing.Size(470, 21);
+            this.tbxIPAddress.TabIndex = 2;
+            // 
+            // lblIPTree
+            // 
+            this.lblIPTree.AutoSize = true;
+            this.lblIPTree.Location = new System.Drawing.Point(63, 15);
+            this.lblIPTree.Name = "lblIPTree";
+            this.lblIPTree.Size = new System.Drawing.Size(41, 12);
+            this.lblIPTree.TabIndex = 1;
+            this.lblIPTree.Text = "IP方案";
+            // 
+            // IPTree
+            // 
+            this.IPTree.Location = new System.Drawing.Point(0, 39);
+            this.IPTree.Name = "IPTree";
+            this.IPTree.Size = new System.Drawing.Size(176, 345);
+            this.IPTree.TabIndex = 0;
+            this.IPTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.IPTree_AfterSelect);
+            // 
+            // ConfigChange
+            // 
+            this.ConfigChange.Controls.Add(this.btnConfigText);
+            this.ConfigChange.Controls.Add(this.lblConfigIP);
+            this.ConfigChange.Controls.Add(this.tbxConfigIP);
+            this.ConfigChange.Controls.Add(this.btnConfigUse);
+            this.ConfigChange.Controls.Add(this.btnConfigDelete);
+            this.ConfigChange.Controls.Add(this.btnConfigEdit);
+            this.ConfigChange.Controls.Add(this.btnConfigAdd);
+            this.ConfigChange.Controls.Add(this.lblConfigName);
+            this.ConfigChange.Controls.Add(this.tbxConfigName);
+            this.ConfigChange.Controls.Add(this.lblConfigTree);
+            this.ConfigChange.Controls.Add(this.ConfigTree);
+            this.ConfigChange.Location = new System.Drawing.Point(4, 22);
+            this.ConfigChange.Name = "ConfigChange";
+            this.ConfigChange.Padding = new System.Windows.Forms.Padding(3);
+            this.ConfigChange.Size = new System.Drawing.Size(816, 384);
+            this.ConfigChange.TabIndex = 1;
+            this.ConfigChange.Text = "配置切换";
+            this.ConfigChange.UseVisualStyleBackColor = true;
+            // 
+            // btnConfigText
+            // 
+            this.btnConfigText.Location = new System.Drawing.Point(701, 76);
+            this.btnConfigText.Name = "btnConfigText";
+            this.btnConfigText.Size = new System.Drawing.Size(75, 23);
+            this.btnConfigText.TabIndex = 26;
+            this.btnConfigText.Text = "维护明细";
+            this.btnConfigText.UseVisualStyleBackColor = true;
+            this.btnConfigText.Click += new System.EventHandler(this.btnConfigText_Click);
+            // 
+            // lblConfigIP
+            // 
+            this.lblConfigIP.AutoSize = true;
+            this.lblConfigIP.Location = new System.Drawing.Point(230, 264);
+            this.lblConfigIP.Name = "lblConfigIP";
+            this.lblConfigIP.Size = new System.Drawing.Size(17, 12);
+            this.lblConfigIP.TabIndex = 25;
+            this.lblConfigIP.Text = "IP";
+            // 
+            // tbxConfigIP
+            // 
+            this.tbxConfigIP.Location = new System.Drawing.Point(274, 264);
+            this.tbxConfigIP.Name = "tbxConfigIP";
+            this.tbxConfigIP.Size = new System.Drawing.Size(508, 21);
+            this.tbxConfigIP.TabIndex = 24;
+            // 
+            // btnConfigUse
+            // 
+            this.btnConfigUse.Location = new System.Drawing.Point(490, 308);
+            this.btnConfigUse.Name = "btnConfigUse";
+            this.btnConfigUse.Size = new System.Drawing.Size(75, 23);
+            this.btnConfigUse.TabIndex = 23;
+            this.btnConfigUse.Text = "应用";
+            this.btnConfigUse.UseVisualStyleBackColor = true;
+            this.btnConfigUse.Click += new System.EventHandler(this.btnConfigUse_Click);
+            // 
+            // btnConfigDelete
+            // 
+            this.btnConfigDelete.Location = new System.Drawing.Point(555, 76);
+            this.btnConfigDelete.Name = "btnConfigDelete";
+            this.btnConfigDelete.Size = new System.Drawing.Size(75, 23);
+            this.btnConfigDelete.TabIndex = 22;
+            this.btnConfigDelete.Text = "删除方案";
+            this.btnConfigDelete.UseVisualStyleBackColor = true;
+            this.btnConfigDelete.Click += new System.EventHandler(this.btnConfigDelete_Click);
+            // 
+            // btnConfigEdit
+            // 
+            this.btnConfigEdit.Location = new System.Drawing.Point(411, 76);
+            this.btnConfigEdit.Name = "btnConfigEdit";
+            this.btnConfigEdit.Size = new System.Drawing.Size(75, 23);
+            this.btnConfigEdit.TabIndex = 21;
+            this.btnConfigEdit.Text = "修改方案";
+            this.btnConfigEdit.UseVisualStyleBackColor = true;
+            this.btnConfigEdit.Click += new System.EventHandler(this.btnConfigEdit_Click);
+            // 
+            // btnConfigAdd
+            // 
+            this.btnConfigAdd.Location = new System.Drawing.Point(277, 76);
+            this.btnConfigAdd.Name = "btnConfigAdd";
+            this.btnConfigAdd.Size = new System.Drawing.Size(75, 23);
+            this.btnConfigAdd.TabIndex = 20;
+            this.btnConfigAdd.Text = "添加方案";
+            this.btnConfigAdd.UseVisualStyleBackColor = true;
+            this.btnConfigAdd.Click += new System.EventHandler(this.btnConfigAdd_Click);
+            // 
+            // lblConfigName
+            // 
+            this.lblConfigName.AutoSize = true;
+            this.lblConfigName.Location = new System.Drawing.Point(230, 36);
+            this.lblConfigName.Name = "lblConfigName";
+            this.lblConfigName.Size = new System.Drawing.Size(29, 12);
+            this.lblConfigName.TabIndex = 19;
+            this.lblConfigName.Text = "名称";
+            // 
+            // tbxConfigName
+            // 
+            this.tbxConfigName.Location = new System.Drawing.Point(274, 33);
+            this.tbxConfigName.Name = "tbxConfigName";
+            this.tbxConfigName.Size = new System.Drawing.Size(508, 21);
+            this.tbxConfigName.TabIndex = 18;
+            // 
+            // lblConfigTree
+            // 
+            this.lblConfigTree.AutoSize = true;
+            this.lblConfigTree.Location = new System.Drawing.Point(70, 9);
+            this.lblConfigTree.Name = "lblConfigTree";
+            this.lblConfigTree.Size = new System.Drawing.Size(53, 12);
+            this.lblConfigTree.TabIndex = 3;
+            this.lblConfigTree.Text = "配置方案";
+            // 
+            // ConfigTree
+            // 
+            this.ConfigTree.Location = new System.Drawing.Point(7, 33);
+            this.ConfigTree.Name = "ConfigTree";
+            this.ConfigTree.Size = new System.Drawing.Size(176, 345);
+            this.ConfigTree.TabIndex = 2;
+            this.ConfigTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.ConfigTree_AfterSelect);
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1467,21 +1602,11 @@
             this.退出ToolStripMenuItem.Text = "退出";
             this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click);
             // 
-            // btnDataOperClearLog
-            // 
-            this.btnDataOperClearLog.Location = new System.Drawing.Point(700, 59);
-            this.btnDataOperClearLog.Name = "btnDataOperClearLog";
-            this.btnDataOperClearLog.Size = new System.Drawing.Size(75, 23);
-            this.btnDataOperClearLog.TabIndex = 17;
-            this.btnDataOperClearLog.Text = "清除日志";
-            this.btnDataOperClearLog.UseVisualStyleBackColor = true;
-            this.btnDataOperClearLog.Click += new System.EventHandler(this.btnDataOperClearLog_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(823, 445);
+            this.ClientSize = new System.Drawing.Size(823, 444);
             this.Controls.Add(this.MainContral);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -1492,10 +1617,6 @@
             this.Text = "工具";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.MainContral.ResumeLayout(false);
-            this.IPChange.ResumeLayout(false);
-            this.IPChange.PerformLayout();
-            this.ConfigChange.ResumeLayout(false);
-            this.ConfigChange.PerformLayout();
             this.OutputInsert.ResumeLayout(false);
             this.OutputInsert.PerformLayout();
             this.DataOper.ResumeLayout(false);
@@ -1515,6 +1636,9 @@
             this.groupBoxTo.PerformLayout();
             this.groupBoxFrom.ResumeLayout(false);
             this.groupBoxFrom.PerformLayout();
+            this.CodeTemplete.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.DocumentCopy.ResumeLayout(false);
             this.DocumentCopy.PerformLayout();
             this.gbxCopyDirectorys.ResumeLayout(false);
@@ -1529,6 +1653,10 @@
             this.gbxDelDirectory.PerformLayout();
             this.gbxDelFile.ResumeLayout(false);
             this.gbxDelFile.PerformLayout();
+            this.IPChange.ResumeLayout(false);
+            this.IPChange.PerformLayout();
+            this.ConfigChange.ResumeLayout(false);
+            this.ConfigChange.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -1665,6 +1793,17 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnIPAuto;
         private System.Windows.Forms.Button btnDataOperClearLog;
+        private System.Windows.Forms.TabPage CodeTemplete;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button btnCodeRun;
+        private System.Windows.Forms.ComboBox cbbCodeTemplete;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox tbxCodeOther;
+        private System.Windows.Forms.ComboBox cbbCodeDataTable;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.ComboBox cbbCodeDataSource;
+        private System.Windows.Forms.Label label9;
     }
 }
 

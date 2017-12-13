@@ -1,7 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Base>
   <DataConnections>
-    <Connection Name="test">Data Source=10.10.1.10;Initial Catalog=test;User ID=test;Password=123.zxc</Connection>
+    <Connection Name="MySqlTest" Type="MySql">server=data.pengbo.info;userid=gohalo_kohler_cj;pwd=gohalo_kohler_cj;port=3306;database=gohalo_kohler_choujiang;sslmode=none;Character Set=utf8;</Connection>
+    <Connection Name="207MPWeChat">Data Source=192.168.1.207;Initial Catalog=MP_WeChat;User ID=sa;Password=zvoice_2014</Connection>
+    <Connection Name="207MPFileStore">Data Source=192.168.1.207;Initial Catalog=MP_FileStore;User ID=sa;Password=zvoice_2014</Connection>
+    <Connection Name="本机MPWeChat">Data Source=.;Initial Catalog=MP_WeChat;User ID=sa;Password=Password01!</Connection>
+    <Connection Name="本机FE_Base">Data Source=.;Initial Catalog=FE_Base;User ID=sa;Password=Password01!</Connection>
+    <Connection Name="207CMSBase">data source=192.168.1.207;Initial Catalog=_Base;user id=mgcc_cms_sa;PWD=mgcc_cms_sa;</Connection>
+    <Connection Name="207CMSHr">data source=192.168.1.207;Initial Catalog=_HR;user id=mgcc_cms_sa;PWD=mgcc_cms_sa;</Connection>
+    <Connection Name="207CMSWorkFlow">data source=192.168.1.207;Initial Catalog=_WorkFlow;user id=mgcc_cms_sa;PWD=mgcc_cms_sa;</Connection>
+    <Connection Name="207CMSWorkTime">data source=192.168.1.207;Initial Catalog=_WorkTime;user id=mgcc_cms_sa;PWD=mgcc_cms_sa;</Connection>
+    <Connection Name="207ERP">data source=192.168.1.207;database=mgcc_ems;uid=mgcc_ems;password=mgcc_ems;</Connection>
+    <Connection Name="117CMSBase">data source=pdata.mgcc.com.cn;Initial Catalog=FE_Base;user id=mgcc_cms;password=zvoice2015;</Connection>
+    <Connection Name="117CMSHr">data source=pdata.mgcc.com.cn;Initial Catalog=FE_HR;user id=mgcc_cms;password=zvoice2015;</Connection>
+    <Connection Name="117CMSWorkFlow">data source=pdata.mgcc.com.cn;Initial Catalog=FE_WorkFlow;user id=mgcc_cms;password=zvoice2015;</Connection>
+    <Connection Name="117CMSWorkTime">data source=pdata.mgcc.com.cn;Initial Catalog=FE_WorkTime;user id=mgcc_cms;password=zvoice2015;</Connection>
+    <Connection Name="117ERP">data source=erpdata.mgcc.com.cn;database=MGCC_EMS;uid=mgcc_ems_sa;password=777777@wx;</Connection>
+    <Connection Name="阿里云MPBase">Data Source=pdata.mgcc.com.cn;Initial Catalog=MP_Base;User ID=wechat;Password=zvoice_2015</Connection>
+    <Connection Name="阿里云MPFileStore">Data Source=pdata.mgcc.com.cn;Initial Catalog=MP_FileStore;User ID=wechat;Password=zvoice_2015</Connection>
+    <Connection Name="阿里云MPWeChat">Data Source=pdata.mgcc.com.cn;Initial Catalog=MP_WeChat;User ID=wechat;Password=zvoice_2015</Connection>
+    <Connection Name="阿里云QYBase">Data Source=pdata.mgcc.com.cn;Initial Catalog=QY_Base;User ID=qiye;Password=qiye123456</Connection>
+    <Connection Name="阿里云QYFileStore">Data Source=pdata.mgcc.com.cn;Initial Catalog=QY_FileStore;User ID=qiye;Password=qiye123456</Connection>
+    <Connection Name="阿里云QYWeChat">Data Source=pdata.mgcc.com.cn;Initial Catalog=QY_WeChat;User ID=qiye;Password=qiye123456</Connection>
+    <Connection Name="LYTTestBase">data source=pdata.mgcc.com.cn;Initial Catalog=LYTTest_Base;User ID=lyt;PWD=lyt55881717;</Connection>
+    <Connection Name="LYTBase">data source=pdata.mgcc.com.cn;Initial Catalog=LYT_Base;User ID=lyt;PWD=lyt55881717;</Connection>
+    <Connection Name="LYTTestProject">Data Source=pdata.mgcc.com.cn;Initial Catalog=LYTTest_Project;User ID=lyt;PWD=lyt55881717;</Connection>
+    <Connection Name="LYTProject">Data Source=pdata.mgcc.com.cn;Initial Catalog=LYT_Project;User ID=lyt;PWD=lyt55881717;</Connection>
+    <Connection Name="LYTTestFileStore">Data Source=pdata.mgcc.com.cn;Initial Catalog=LYTTest_FileStore;User ID=lyt;PWD=lyt55881717;</Connection>
+    <Connection Name="LYTFileStore">Data Source=pdata.mgcc.com.cn;Initial Catalog=LYT_FileStore;User ID=lyt;PWD=lyt55881717;</Connection>
+    <Connection Name="LYTTestWorkFlow">Data Source=pdata.mgcc.com.cn;Initial Catalog=LYTTest_WorkFlow;User ID=lyt;PWD=lyt55881717;</Connection>
+    <Connection Name="LYTWorkFlow">Data Source=pdata.mgcc.com.cn;Initial Catalog=LYT_WorkFlow;User ID=lyt;PWD=lyt55881717;</Connection>
+    <Connection Name="FE_Base">Data Source=pdata.mgcc.com.cn;Initial Catalog=FE_Base;User ID=sa;PWD=Password01!;</Connection>
+    <Connection Name="正式Mamakol">Data Source=139.129.218.37;Initial Catalog=mamakol_site;User ID=sa;Password=Password01!;</Connection>
+    <Connection Name="测试Mamakol">Data Source=139.129.218.37;Initial Catalog=mamakol_test;User ID=sa;Password=Password01!;</Connection>
   </DataConnections>
   <IPAddress>
     <IP Name="Home" IPAddress="10.10.1.127" SubnetMask="255.255.255.0" DefaultIPGateway="10.10.1.252" DNSServerSearchOrder="10.10.1.249" DNSServerSpare="10.10.1.248" />
@@ -12,7 +43,7 @@
       <Item Name="sqlconfig" Type="Sql" DataBase="test" Path="" />
     </Config>
   </ConfigAddress>
-  <Output>
-    <Item Name="testoutput" Table="testtable" DataBase="test" />
-  </Output>
+  <CodeTemplete>
+    <Item Name="testTemplete" Path="D:\Project\diy\Pb.NetCoreWebSiteCodeTemplete\" />
+  </CodeTemplete>
 </Base>

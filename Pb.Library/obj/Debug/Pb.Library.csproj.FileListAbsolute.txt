@@ -32,3 +32,14 @@ D:\Project\PbTool\Pb.Library\bin\Debug\ICSharpCode.SharpZipLib.dll
 D:\Project\PbTool\Pb.Library\bin\Debug\Interop.SQLDMO.dll
 D:\Project\PbTool\Pb.Library\bin\Debug\office.dll
 D:\Project\PbTool\Pb.Library\bin\Debug\Microsoft.Vbe.Interop.dll
+D:\Project\diy\PbTool\Pb.Library\bin\Debug\Pb.Library.dll
+D:\Project\diy\PbTool\Pb.Library\bin\Debug\Pb.Library.pdb
+D:\Project\diy\PbTool\Pb.Library\bin\Debug\ICSharpCode.SharpZipLib.dll
+D:\Project\diy\PbTool\Pb.Library\bin\Debug\Interop.SQLDMO.dll
+D:\Project\diy\PbTool\Pb.Library\bin\Debug\office.dll
+D:\Project\diy\PbTool\Pb.Library\bin\Debug\Microsoft.Vbe.Interop.dll
+D:\Project\diy\PbTool\Pb.Library\bin\Debug\stdole.dll
+D:\Project\diy\PbTool\Pb.Library\obj\Debug\Pb.Library.csprojResolveAssemblyReference.cache
+D:\Project\diy\PbTool\Pb.Library\obj\Debug\Pb.Library.csproj.CoreCompileInputs.cache
+D:\Project\diy\PbTool\Pb.Library\obj\Debug\Pb.Library.dll
+D:\Project\diy\PbTool\Pb.Library\obj\Debug\Pb.Library.pdb

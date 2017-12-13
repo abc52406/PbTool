@@ -15,15 +15,15 @@
       <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
         <!--
           UAC 清单选项
-          如果要更改 Windows 用户帐户控制级别，请用以下节点之一替换
-          requestedExecutionLevel 节点。
+         若想要更改 Windows 用户帐户控制级别，请
+         将 requestedExecutionLevel 节点替换为下述某项。
 
-        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
-        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
-        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+       <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+       <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+       <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
 
-          如果要利用文件和注册表虚拟化提供
-          向后兼容性，请删除 requestedExecutionLevel 节点。
+        若想要使用文件和注册表虚拟化以实现向后
+        兼容，请删除 requestedExecutionLevel 节点。
     -->
         <requestedExecutionLevel level="asInvoker" uiAccess="false" />
       </requestedPrivileges>
@@ -38,22 +38,7 @@
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
-      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="2.0.50727.0" />
-    </dependentAssembly>
-  </dependency>
-  <dependency>
-    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
-      <assemblyIdentity name="stdole" version="7.0.3300.0" publicKeyToken="B03F5F7F11D50A3A" language="neutral" />
-    </dependentAssembly>
-  </dependency>
-  <dependency>
-    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
-      <assemblyIdentity name="System.Core" version="3.5.0.0" publicKeyToken="b77a5c561934e089" language="neutral" processorArchitecture="msil" />
-    </dependentAssembly>
-  </dependency>
-  <dependency>
-    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
-      <assemblyIdentity name="WindowsBase" version="3.0.0.0" publicKeyToken="31bf3856ad364e35" language="neutral" processorArchitecture="msil" />
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
     </dependentAssembly>
   </dependency>
   <dependency>
@@ -63,8 +48,8 @@
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>vPGju3HjLLxKEbx5W6kx4x5Io5g=</dsig:DigestValue>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>cNWPJooaP+4+iMd9p707UTDQ9jzw3EzjqtFrD5++i7E=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -75,8 +60,8 @@
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>uNf+a9ZGATjGZkp/l9Ovpp2k5Nw=</dsig:DigestValue>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>HfZSU0oig+w6IVZFrlK0fhXtuvYPzM0WaKd0ovA/De0=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -87,8 +72,8 @@
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>F9KcWGdatx3NMdBih72kWn9Kyzk=</dsig:DigestValue>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>BYS3eCjBfduftRxyoNzOV7ugXOUbF6qMHwTm6yOk1Jk=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -99,8 +84,8 @@
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>TYuB9hyuoYvM3Fgsjd+TSTdMLbY=</dsig:DigestValue>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>dC20wGEVL+UVnc1ofxVolqK6s6ZrgTmh4mrWWMxGVIw=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -111,42 +96,54 @@
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>qLZAFskrUjHV/TFbvevZR7hSGP4=</dsig:DigestValue>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>UDRP50jQkqJWWTOYzDAYCFONmPf9i9nyBi2elcJQqjs=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Pb.Library.dll" size="53760">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Pb.Library.dll" size="51200">
       <assemblyIdentity name="Pb.Library" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>c1bbqzpHqro92XBIqAATNIJqLck=</dsig:DigestValue>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>3PT+pFwm4wyy9lZtDy5DwXeSSbMWyG3X1PWDb3lS2XA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PbTool.exe" size="87040">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PbTool.exe" size="90624">
       <assemblyIdentity name="PbTool" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>tKFJ9e0gyJWXfbwnUsoy4iNsQO4=</dsig:DigestValue>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>seC+rlHlkqW3awtH2S7WO35nknCNc3oS6MTb0vwHn1M=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="PbTool.exe.config" size="1991">
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="stdole.dll" size="16384">
+      <assemblyIdentity name="stdole" version="7.0.3300.0" publicKeyToken="B03F5F7F11D50A3A" language="neutral" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>4jHHyAElfb7cXNor3P2cbVBweFB3wmJJVUtNDr+1NCA=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="PbTool.exe.config" size="2271">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
-      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>a4aAVJzMlXtsxWVomvgjwACRv/s=</dsig:DigestValue>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>SCmOK33gH+l0dQBv9NBOHGsvbOsRU2tFLKOy5FdbBbQ=</dsig:DigestValue>
     </hash>
   </file>
 </asmv1:assembly>

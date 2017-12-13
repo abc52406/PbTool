@@ -1,1 +1,0 @@
-﻿update testtable set Name='' where ID=''

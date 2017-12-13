@@ -15,4 +15,7 @@
   <Output>
     <Item Name="testoutput" Table="testtable" DataBase="test" />
   </Output>
+  <CodeTemplete>
+    <Item Name="testTemplete" Path="D:\test\" />
+  </CodeTemplete>
 </Base>

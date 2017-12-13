@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -18,16 +16,21 @@ namespace PbTool
     {
         #region 私有变量
         private XmlHelper docoper;
-        private Dictionary<string, string> dataSourceList = new Dictionary<string, string>();
+        private Dictionary<string, Tuple<string,string>> dataSourceList = new Dictionary<string, Tuple<string, string>>();
         private DBHelper dbHelperfrom, dbHelperto, dbHelperoper;
         private string providerName = ConfigurationSettings.AppSettings["ProviderName"];
-        private string tableSearchSql = ConfigurationSettings.AppSettings["TableSearchSql"];
-        private string columnSearchSql = ConfigurationSettings.AppSettings["ColumnSearchSql"];
+        private string[] tableSearchSql = ConfigurationSettings.AppSettings["TableSearchSql"].Split(';');
+        private string[] columnSearchSql = ConfigurationSettings.AppSettings["ColumnSearchSql"].Split(';');
         private string dataSetConfigPath = ConfigurationSettings.AppSettings["SourcePath"];
         private string excelTmplPath = ConfigurationSettings.AppSettings["ExcelTmplPath"];
         private string configDataPath = ConfigurationSettings.AppSettings["ConfigDataPath"];
         private string outputDataPath = ConfigurationSettings.AppSettings["OutputDataPath"];
         private string deskPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        private Dictionary<string, string> connectType = new Dictionary<string, string>()
+        {
+            { "SqlServer","System.Data.SqlClient"},
+            { "MySql","MySql.Data.MySqlClient"},
+        };
         #endregion
 
         #region 构造函数
@@ -51,6 +54,7 @@ namespace PbTool
             LoadIPScheme();
             LoadConfigScheme();
             LoadOutputScheme();
+            LoadCodeScheme();
         }
         #endregion
 
@@ -77,7 +81,7 @@ namespace PbTool
         /// <param name="e"></param>
         private void 退出ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Dispose();
+            Dispose();
         }
         #endregion
         #endregion
@@ -98,8 +102,8 @@ namespace PbTool
                     //两个表名都不能为空
                     if (!string.IsNullOrEmpty(TableFrom) && !string.IsNullOrEmpty(TableTo))
                     {
-                        IEnumerable<DataRow> targetdif = DataCompareHelper.QueryDiffRows(dataSourceList[DataSetFrom], TableFrom, providerName, WhereFrom, dataSourceList[DataSetTo], TableTo, providerName, WhereTo);
-                        IEnumerable<DataRow> sourcedif = DataCompareHelper.QueryDiffRows(dataSourceList[DataSetTo], TableTo, providerName, WhereTo, dataSourceList[DataSetFrom], TableFrom, providerName, WhereFrom);
+                        IEnumerable<DataRow> targetdif = DataCompareHelper.QueryDiffRows(dataSourceList[DataSetFrom].Item1, TableFrom, dataSourceList[DataSetFrom].Item2, WhereFrom, dataSourceList[DataSetTo].Item1, TableTo, dataSourceList[DataSetTo].Item2, WhereTo);
+                        IEnumerable<DataRow> sourcedif = DataCompareHelper.QueryDiffRows(dataSourceList[DataSetTo].Item1, TableTo, dataSourceList[DataSetTo].Item2, WhereTo, dataSourceList[DataSetFrom].Item1, TableFrom, dataSourceList[DataSetFrom].Item2, WhereFrom);
                         DoDataDiffExecute(targetdif, sourcedif);
                         MessageBox.Show("执行成功");
                     }
@@ -182,12 +186,12 @@ namespace PbTool
         {
             try
             {
-                dbHelperfrom = new DBHelper(dataSourceList[DataSetFrom], providerName);
-                DbDataReader reader = DBFrom.ExecuteReader(tableSearchSql);
-                this.TableListFrom.Items.Clear();
+                dbHelperfrom = new DBHelper(dataSourceList[DataSetFrom].Item1, connectType[dataSourceList[DataSetFrom].Item2]);
+                DbDataReader reader = DBFrom.ExecuteReader(GetTableNamesSearchSql(dataSourceList[DataSetFrom].Item2));
+                TableListFrom.Items.Clear();
                 while (reader.Read())
                 {
-                    this.TableListFrom.Items.Add(reader.Get<string>("Name"));
+                    TableListFrom.Items.Add(reader.Get<string>("Name"));
                 }
                 reader.Close();
             }
@@ -208,12 +212,12 @@ namespace PbTool
         {
             try
             {
-                dbHelperto = new DBHelper(dataSourceList[DataSetTo], providerName);
-                DbDataReader reader = DBTo.ExecuteReader(tableSearchSql);
-                this.TableListTo.Items.Clear();
+                dbHelperto = new DBHelper(dataSourceList[DataSetTo].Item1, connectType[dataSourceList[DataSetTo].Item2]);
+                DbDataReader reader = DBTo.ExecuteReader(GetTableNamesSearchSql(dataSourceList[DataSetTo].Item2));
+                TableListTo.Items.Clear();
                 while (reader.Read())
                 {
-                    this.TableListTo.Items.Add(reader.Get<string>("Name"));
+                    TableListTo.Items.Add(reader.Get<string>("Name"));
                 }
                 reader.Close();
             }
@@ -239,14 +243,14 @@ namespace PbTool
             {
                 if (DataSetOper.Count()>0)
                 {
-                    DoDataBaseExecute(DataSetOper.Select(c => dataSourceList[c]).ToArray(), cbxBackupDelete.Checked, cbxBackupInsert.Checked);
+                    DoDataBaseExecute(DataSetOper.Select(c => dataSourceList[c].Item1).ToArray(), cbxBackupDelete.Checked, cbxBackupInsert.Checked);
                     MessageBox.Show("执行成功");
                 }
                 else
                     MessageBox.Show("请选择数据源");
             }
             //如果是备份数据库
-            else if (this.cbxBackUpDataBase.Checked)
+            else if (cbxBackUpDataBase.Checked)
             {
                 try
                 {
@@ -254,9 +258,9 @@ namespace PbTool
                     {
                         foreach (var item in DataSetOper.Select(c => dataSourceList[c]))
                         {
-                            DBHelper db = new DBHelper(item, providerName);
+                            DBHelper db = new DBHelper(item.Item1, connectType[item.Item2]);
                             db.ExecuteNonQuery(string.Format("backup database {1} to disk='{0}\\{1}{2}.bak' With init",
-                                this.tbxBakPath.Text.TrimEnd('\\'),
+                                tbxBakPath.Text.TrimEnd('\\'),
                                 db.DataBaseName,
                                 DateTime.Now.ToString("yyMMddHHmmss")), 7200);
                         }
@@ -283,10 +287,10 @@ namespace PbTool
         private void cbxDelete_CheckedChanged(object sender, EventArgs e)
         {
             //如果选择生成sql语句，则不能备份数据库
-            if (this.cbxBackupDelete.Checked)
+            if (cbxBackupDelete.Checked)
             {
-                this.cbxBackUpDataBase.Checked = false;
-                this.cbxCompressBak.Checked = false;
+                cbxBackUpDataBase.Checked = false;
+                cbxCompressBak.Checked = false;
             }
         }
         #endregion
@@ -300,10 +304,10 @@ namespace PbTool
         private void cbxBackupInsert_CheckedChanged(object sender, EventArgs e)
         {
             //如果选择生成sql语句，则不能备份数据库
-            if (this.cbxBackupInsert.Checked)
+            if (cbxBackupInsert.Checked)
             {
-                this.cbxBackUpDataBase.Checked = false;
-                this.cbxCompressBak.Checked = false;
+                cbxBackUpDataBase.Checked = false;
+                cbxCompressBak.Checked = false;
             }
         }
         #endregion
@@ -317,10 +321,10 @@ namespace PbTool
         private void cbxBackUpDataBase_CheckedChanged(object sender, EventArgs e)
         {
             //如果选择备份数据库，就不能生成delete语句
-            if (this.cbxBackUpDataBase.Checked)
+            if (cbxBackUpDataBase.Checked)
             {
-                this.cbxBackupDelete.Checked = false;
-                this.cbxBackupInsert.Checked = false;
+                cbxBackupDelete.Checked = false;
+                cbxBackupInsert.Checked = false;
             }
         }
         #endregion
@@ -334,9 +338,9 @@ namespace PbTool
         private void cbxCompressBak_CheckedChanged(object sender, EventArgs e)
         {
             //如果没有选择备份数据库，就不能压缩备份文件
-            if (!this.cbxBackUpDataBase.Checked)
+            if (!cbxBackUpDataBase.Checked)
             {
-                this.cbxCompressBak.Checked = false;
+                cbxCompressBak.Checked = false;
             }
         }
         #endregion
@@ -355,7 +359,7 @@ namespace PbTool
                 {
                     foreach (var item in DataSetOper.Select(c => dataSourceList[c]))
                     {
-                        DBHelper db = new DBHelper(item, providerName);
+                        DBHelper db = new DBHelper(item.Item1, connectType[item.Item2]);
                         //因为ExecuteNonQuery方法不支持多个sql语句之间用GO连接，因此拆成多次执行
                         var SqlVersion = db.ExecuteScalar("select @@version").ToString();
                         if (SqlVersion.IndexOf("2005") > 0)
@@ -582,21 +586,21 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
         /// <param name="e"></param>
         private void btnIPAdd_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(this.tbxIPName.Text))
+            if (!string.IsNullOrEmpty(tbxIPName.Text))
             {
-                if (docoper.Exist(string.Format("/Base/IPAddress/IP[@Name='{0}']", this.tbxIPName.Text)))
-                    MessageBox.Show(string.Format("已存在名称为（{0}）的IP方案", this.tbxIPName.Text));
+                if (docoper.Exist(string.Format("/Base/IPAddress/IP[@Name='{0}']", tbxIPName.Text)))
+                    MessageBox.Show(string.Format("已存在名称为（{0}）的IP方案", tbxIPName.Text));
                 else
                 {
                     XmlElement ele = docoper.Doc.CreateElement("IP");
-                    ele.SetAttribute("Name", this.tbxIPName.Text);
-                    ele.SetAttribute("IPAddress", this.tbxIPAddress.Text);
-                    ele.SetAttribute("SubnetMask", this.tbxSubNetMask.Text);
-                    ele.SetAttribute("DefaultIPGateway", this.tbxDefaultIPGateWay.Text);
-                    ele.SetAttribute("DNSServerSearchOrder", this.tbxDNSServerSearchOrder.Text);
-                    ele.SetAttribute("DNSServerSpare", this.tbxDNSServerSpare.Text);
+                    ele.SetAttribute("Name", tbxIPName.Text);
+                    ele.SetAttribute("IPAddress", tbxIPAddress.Text);
+                    ele.SetAttribute("SubnetMask", tbxSubNetMask.Text);
+                    ele.SetAttribute("DefaultIPGateway", tbxDefaultIPGateWay.Text);
+                    ele.SetAttribute("DNSServerSearchOrder", tbxDNSServerSearchOrder.Text);
+                    ele.SetAttribute("DNSServerSpare", tbxDNSServerSpare.Text);
                     docoper.AddEle(ele, "/Base/IPAddress");
-                    this.LoadIPScheme();
+                    LoadIPScheme();
                 }
             }
             else
@@ -612,35 +616,35 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
         /// <param name="e"></param>
         private void btnIPEdit_Click(object sender, EventArgs e)
         {
-            TreeNode node = this.IPTree.SelectedNode;
-            if (node != null && !string.IsNullOrEmpty(this.tbxIPName.Text))
+            TreeNode node = IPTree.SelectedNode;
+            if (node != null && !string.IsNullOrEmpty(tbxIPName.Text))
             {
-                if (this.tbxIPName.Text == this.IPTree.SelectedNode.Text)
+                if (tbxIPName.Text == IPTree.SelectedNode.Text)
                 {
-                    XmlElement ele = docoper.QueryEle(string.Format("/Base/IPAddress/IP[@Name='{0}']", this.tbxIPName.Text));
-                    ele.SetAttribute("IPAddress", this.tbxIPAddress.Text);
-                    ele.SetAttribute("SubnetMask", this.tbxSubNetMask.Text);
-                    ele.SetAttribute("DefaultIPGateway", this.tbxDefaultIPGateWay.Text);
-                    ele.SetAttribute("DNSServerSearchOrder", this.tbxDNSServerSearchOrder.Text);
-                    ele.SetAttribute("DNSServerSpare", this.tbxDNSServerSpare.Text);
+                    XmlElement ele = docoper.QueryEle(string.Format("/Base/IPAddress/IP[@Name='{0}']", tbxIPName.Text));
+                    ele.SetAttribute("IPAddress", tbxIPAddress.Text);
+                    ele.SetAttribute("SubnetMask", tbxSubNetMask.Text);
+                    ele.SetAttribute("DefaultIPGateway", tbxDefaultIPGateWay.Text);
+                    ele.SetAttribute("DNSServerSearchOrder", tbxDNSServerSearchOrder.Text);
+                    ele.SetAttribute("DNSServerSpare", tbxDNSServerSpare.Text);
                     docoper.Save();
-                    this.LoadIPScheme();
+                    LoadIPScheme();
                 }
-                else if (docoper.Exist(string.Format("/Base/IPAddress/IP[@Name='{0}']", this.tbxIPName.Text)))
+                else if (docoper.Exist(string.Format("/Base/IPAddress/IP[@Name='{0}']", tbxIPName.Text)))
                 {
-                    MessageBox.Show(string.Format("已存在名称为（{0}）的数据源", this.tbxIPName.Text));
+                    MessageBox.Show(string.Format("已存在名称为（{0}）的数据源", tbxIPName.Text));
                 }
                 else
                 {
-                    XmlElement ele = docoper.QueryEle(string.Format("/Base/IPAddress/IP[@Name='{0}']", this.IPTree.SelectedNode.Name));
-                    ele.SetAttribute("Name", this.tbxIPName.Text);
-                    ele.SetAttribute("IPAddress", this.tbxIPAddress.Text);
-                    ele.SetAttribute("SubnetMask", this.tbxSubNetMask.Text);
-                    ele.SetAttribute("DefaultIPGateway", this.tbxDefaultIPGateWay.Text);
-                    ele.SetAttribute("DNSServerSearchOrder", this.tbxDNSServerSearchOrder.Text);
-                    ele.SetAttribute("DNSServerSpare", this.tbxDNSServerSpare.Text);
+                    XmlElement ele = docoper.QueryEle(string.Format("/Base/IPAddress/IP[@Name='{0}']", IPTree.SelectedNode.Name));
+                    ele.SetAttribute("Name", tbxIPName.Text);
+                    ele.SetAttribute("IPAddress", tbxIPAddress.Text);
+                    ele.SetAttribute("SubnetMask", tbxSubNetMask.Text);
+                    ele.SetAttribute("DefaultIPGateway", tbxDefaultIPGateWay.Text);
+                    ele.SetAttribute("DNSServerSearchOrder", tbxDNSServerSearchOrder.Text);
+                    ele.SetAttribute("DNSServerSpare", tbxDNSServerSpare.Text);
                     docoper.Save();
-                    this.LoadIPScheme();
+                    LoadIPScheme();
                 }
             }
         }
@@ -654,11 +658,11 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
         /// <param name="e"></param>
         private void btnIPDelete_Click(object sender, EventArgs e)
         {
-            TreeNode node = this.IPTree.SelectedNode;
+            TreeNode node = IPTree.SelectedNode;
             if (node != null)
             {
-                docoper.DeleteNode(string.Format("/Base/IPAddress/IP[@Name='{0}']", this.IPTree.SelectedNode.Text));
-                this.LoadIPScheme();
+                docoper.DeleteNode(string.Format("/Base/IPAddress/IP[@Name='{0}']", IPTree.SelectedNode.Text));
+                LoadIPScheme();
             }
         }
         #endregion
@@ -673,10 +677,10 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
         {
             try
             {
-                IPHelper.SetIP(this.tbxIPAddress.Text, this.tbxSubNetMask.Text, this.tbxDefaultIPGateWay.Text, this.tbxDNSServerSearchOrder.Text, this.tbxDNSServerSpare.Text);
-                if (this.IPTree.SelectedNode != null)
+                IPHelper.SetIP(tbxIPAddress.Text, tbxSubNetMask.Text, tbxDefaultIPGateWay.Text, tbxDNSServerSearchOrder.Text, tbxDNSServerSpare.Text);
+                if (IPTree.SelectedNode != null)
                 {
-                    var selectedscheme = IPSchemeList.Where(c => c.Name == this.IPTree.SelectedNode.Text).FirstOrDefault();
+                    var selectedscheme = IPSchemeList.Where(c => c.Name == IPTree.SelectedNode.Text).FirstOrDefault();
                     if (!string.IsNullOrEmpty(selectedscheme.Name))
                     {
                         foreach (var item in selectedscheme.ReplaceSchemes)
@@ -726,16 +730,16 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
         /// <param name="e"></param>
         private void btnConfigAdd_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(this.tbxConfigName.Text))
+            if (!string.IsNullOrEmpty(tbxConfigName.Text))
             {
-                if (docoper.Exist(string.Format("/Base/ConfigAddress/Config[@Name='{0}']", this.tbxConfigName.Text)))
-                    MessageBox.Show(string.Format("已存在名称为（{0}）的配置方案", this.tbxConfigName.Text));
+                if (docoper.Exist(string.Format("/Base/ConfigAddress/Config[@Name='{0}']", tbxConfigName.Text)))
+                    MessageBox.Show(string.Format("已存在名称为（{0}）的配置方案", tbxConfigName.Text));
                 else
                 {
                     XmlElement ele = docoper.Doc.CreateElement("Config");
-                    ele.SetAttribute("Name", this.tbxConfigName.Text);
+                    ele.SetAttribute("Name", tbxConfigName.Text);
                     docoper.AddEle(ele, "/Base/ConfigAddress");
-                    this.LoadConfigScheme();
+                    LoadConfigScheme();
                 }
             }
             else
@@ -751,24 +755,24 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
         /// <param name="e"></param>
         private void btnConfigEdit_Click(object sender, EventArgs e)
         {
-            TreeNode node = this.ConfigTree.SelectedNode;
-            if (node != null && !string.IsNullOrEmpty(this.tbxConfigName.Text))
+            TreeNode node = ConfigTree.SelectedNode;
+            if (node != null && !string.IsNullOrEmpty(tbxConfigName.Text))
             {
-                if (node.Text == this.tbxConfigName.Text)
+                if (node.Text == tbxConfigName.Text)
                     return;
-                if (docoper.Exist(string.Format("/Base/ConfigAddress/Config[@Name='{0}']", this.tbxConfigName.Text)))
+                if (docoper.Exist(string.Format("/Base/ConfigAddress/Config[@Name='{0}']", tbxConfigName.Text)))
                 {
-                    MessageBox.Show(string.Format("已存在名称为（{0}）的数据源", this.tbxConfigName.Text));
+                    MessageBox.Show(string.Format("已存在名称为（{0}）的数据源", tbxConfigName.Text));
                 }
                 else
                 {
                     XmlElement ele = docoper.QueryEle(string.Format("/Base/ConfigAddress/Config[@Name='{0}']", node.Text));
-                    ele.SetAttribute("Name", this.tbxConfigName.Text);
+                    ele.SetAttribute("Name", tbxConfigName.Text);
                     docoper.Save();
                     DirectoryInfo di = new DirectoryInfo(string.Format("{0}{1}{2}", Application.StartupPath, configDataPath, node.Text));
                     if (di.Exists)
-                        di.MoveTo(string.Format("{0}{1}{2}", Application.StartupPath, configDataPath, this.tbxConfigName.Text));
-                    this.LoadConfigScheme();
+                        di.MoveTo(string.Format("{0}{1}{2}", Application.StartupPath, configDataPath, tbxConfigName.Text));
+                    LoadConfigScheme();
                 }
             }
         }
@@ -782,7 +786,7 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
         /// <param name="e"></param>
         private void btnConfigDelete_Click(object sender, EventArgs e)
         {
-            TreeNode node = this.ConfigTree.SelectedNode;
+            TreeNode node = ConfigTree.SelectedNode;
             if (node != null)
             {
                 docoper.DeleteNode(string.Format("/Base/ConfigAddress/Config[@Name='{0}']", node.Text));
@@ -791,7 +795,7 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
                 if (di.Exists)
                     di.Delete(true);
 
-                this.LoadConfigScheme();
+                LoadConfigScheme();
             }
         }
         #endregion
@@ -806,7 +810,7 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
         {
             try
             {
-                TreeNode node = this.ConfigTree.SelectedNode;
+                TreeNode node = ConfigTree.SelectedNode;
                 XmlElement ele = docoper.QueryEle(string.Format("/Base/ConfigAddress/Config[@Name='{0}']", node.Text));
                 for (int i = 0; i < ele.ChildNodes.Count; i++)
                 {
@@ -821,7 +825,7 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
                     }
                     else if (child.GetAttribute("Type") == "Sql" && !string.IsNullOrEmpty(child.GetAttribute("DataBase")))
                     {
-                        DBHelper db = new DBHelper(dataSourceList[child.GetAttribute("DataBase")], providerName);
+                        DBHelper db = new DBHelper(dataSourceList[child.GetAttribute("DataBase")].Item1, connectType[dataSourceList[child.GetAttribute("DataBase")].Item2]);
                         db.ExecuteNonQuery(FileStreamHelper.ReadText(string.Format("{0}{1}{2}\\{3}", Application.StartupPath, configDataPath, ele.GetAttribute("Name"), child.GetAttribute("Name"))).Replace("{IP}", tbxConfigIP.Text));
                     }
                 }
@@ -854,7 +858,7 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
         #region 切换配置
         private void ConfigTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            this.tbxConfigName.Text = ConfigTree.SelectedNode.Text;
+            tbxConfigName.Text = ConfigTree.SelectedNode.Text;
         }
         #endregion
         #endregion
@@ -868,22 +872,22 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
         /// <param name="e"></param>
         private void btnOutputAdd_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(this.tbxOutputName.Text))
+            if (!string.IsNullOrEmpty(tbxOutputName.Text))
             {
-                if (docoper.Exist(string.Format("/Base/Output/Item[@Name='{0}']", this.tbxOutputName.Text)))
-                    MessageBox.Show(string.Format("已存在名称为（{0}）的导出方案", this.tbxOutputName.Text));
+                if (docoper.Exist(string.Format("/Base/Output/Item[@Name='{0}']", tbxOutputName.Text)))
+                    MessageBox.Show(string.Format("已存在名称为（{0}）的导出方案", tbxOutputName.Text));
                 else
                 {
                     XmlElement ele = docoper.Doc.CreateElement("Item");
-                    ele.SetAttribute("Name", this.tbxOutputName.Text);
-                    ele.SetAttribute("Table", this.tbxOutputTableName.Text);
-                    ele.SetAttribute("DataBase", this.cbbOutputDataSet.Text);
+                    ele.SetAttribute("Name", tbxOutputName.Text);
+                    ele.SetAttribute("Table", tbxOutputTableName.Text);
+                    ele.SetAttribute("DataBase", cbbOutputDataSet.Text);
                     docoper.AddEle(ele, "/Base/Output");
-                    DirectoryInfo di = new DirectoryInfo(string.Format("{0}{1}{2}\\", Application.StartupPath, outputDataPath, this.tbxOutputName.Text));
+                    DirectoryInfo di = new DirectoryInfo(string.Format("{0}{1}{2}\\", Application.StartupPath, outputDataPath, tbxOutputName.Text));
                     di.Create();
-                    FileStreamHelper.SaveText(string.Format("{0}{1}{2}\\", Application.StartupPath, outputDataPath, this.tbxOutputName.Text), "Select", this.tbxOutputSql.Text);
-                    FileStreamHelper.SaveText(string.Format("{0}{1}{2}\\", Application.StartupPath, outputDataPath, this.tbxOutputName.Text), "Delete", this.tbxOutputDelete.Text);
-                    this.LoadOutputScheme(this.tbxOutputName.Text);
+                    FileStreamHelper.SaveText(string.Format("{0}{1}{2}\\", Application.StartupPath, outputDataPath, tbxOutputName.Text), "Select", tbxOutputSql.Text);
+                    FileStreamHelper.SaveText(string.Format("{0}{1}{2}\\", Application.StartupPath, outputDataPath, tbxOutputName.Text), "Delete", tbxOutputDelete.Text);
+                    LoadOutputScheme(tbxOutputName.Text);
                 }
             }
             else
@@ -900,27 +904,27 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
         private void btnOutputModify_Click(object sender, EventArgs e)
         {
             string selecteditem = (string)OutputList.SelectedItem;
-            if (!string.IsNullOrEmpty(selecteditem) && !string.IsNullOrEmpty(this.tbxOutputName.Text))
+            if (!string.IsNullOrEmpty(selecteditem) && !string.IsNullOrEmpty(tbxOutputName.Text))
             {
-                if (selecteditem != this.tbxOutputName.Text && docoper.Exist(string.Format("/Base/Output/Item[@Name='{0}']", this.tbxOutputName.Text)))
+                if (selecteditem != tbxOutputName.Text && docoper.Exist(string.Format("/Base/Output/Item[@Name='{0}']", tbxOutputName.Text)))
                 {
-                    MessageBox.Show(string.Format("已存在名称为（{0}）的导出方案", this.tbxOutputName.Text));
+                    MessageBox.Show(string.Format("已存在名称为（{0}）的导出方案", tbxOutputName.Text));
                 }
                 else
                 {
                     XmlElement ele = docoper.QueryEle(string.Format("/Base/Output/Item[@Name='{0}']", selecteditem));
-                    ele.SetAttribute("Name", this.tbxOutputName.Text);
-                    ele.SetAttribute("Table", this.tbxOutputTableName.Text);
-                    ele.SetAttribute("DataBase", this.cbbOutputDataSet.Text);
+                    ele.SetAttribute("Name", tbxOutputName.Text);
+                    ele.SetAttribute("Table", tbxOutputTableName.Text);
+                    ele.SetAttribute("DataBase", cbbOutputDataSet.Text);
                     docoper.Save();
                     DirectoryInfo di = new DirectoryInfo(string.Format("{0}{1}{2}\\", Application.StartupPath, outputDataPath, selecteditem));
                     if (di.Exists)
                         di.Delete(true);
-                    DirectoryInfo newdi = new DirectoryInfo(string.Format("{0}{1}{2}\\", Application.StartupPath, outputDataPath, this.tbxOutputName.Text));
+                    DirectoryInfo newdi = new DirectoryInfo(string.Format("{0}{1}{2}\\", Application.StartupPath, outputDataPath, tbxOutputName.Text));
                     newdi.Create();
-                    FileStreamHelper.SaveText(string.Format("{0}{1}{2}\\", Application.StartupPath, outputDataPath, this.tbxOutputName.Text), "Select", this.tbxOutputSql.Text);
-                    FileStreamHelper.SaveText(string.Format("{0}{1}{2}\\", Application.StartupPath, outputDataPath, this.tbxOutputName.Text), "Delete", this.tbxOutputDelete.Text);
-                    this.LoadOutputScheme(this.tbxOutputName.Text);
+                    FileStreamHelper.SaveText(string.Format("{0}{1}{2}\\", Application.StartupPath, outputDataPath, tbxOutputName.Text), "Select", tbxOutputSql.Text);
+                    FileStreamHelper.SaveText(string.Format("{0}{1}{2}\\", Application.StartupPath, outputDataPath, tbxOutputName.Text), "Delete", tbxOutputDelete.Text);
+                    LoadOutputScheme(tbxOutputName.Text);
                 }
             }
         }
@@ -938,10 +942,10 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
             if (!string.IsNullOrEmpty(selecteditem))
             {
                 docoper.DeleteNode(string.Format("/Base/Output/Item[@Name='{0}']", selecteditem));
-                DirectoryInfo di = new DirectoryInfo(string.Format("{0}{1}{2}\\", Application.StartupPath, outputDataPath, this.tbxOutputName.Text));
+                DirectoryInfo di = new DirectoryInfo(string.Format("{0}{1}{2}\\", Application.StartupPath, outputDataPath, tbxOutputName.Text));
                 if (di.Exists)
                     di.Delete(true);
-                this.LoadOutputScheme();
+                LoadOutputScheme();
             }
         }
         #endregion
@@ -960,7 +964,7 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
                 foreach (object item in OutputList.SelectedItems)
                 {
                     XmlElement ele = docoper.QueryEle(string.Format("/Base/Output/Item[@Name='{0}']", item));
-                    DBHelper operDB = new DBHelper(dataSourceList[ele.GetAttribute("DataBase")], providerName);
+                    DBHelper operDB = new DBHelper(dataSourceList[ele.GetAttribute("DataBase")].Item1, connectType[dataSourceList[ele.GetAttribute("DataBase")].Item2]);
                     sb.AppendFormat(@"Use [{0}]
 
 ", operDB.DataBaseName);
@@ -991,6 +995,123 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
         private void OutputList_SelectedIndexChanged(object sender, EventArgs e)
         {
             SelectSingleOutput((string)OutputList.SelectedItem);
+        }
+        #endregion
+        #endregion
+
+        #region 代码生成器
+        #region 执行代码生成
+        /// <summary>
+        /// 执行代码生成
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCodeRun_Click(object sender, EventArgs e)
+        {
+            #region 检查
+            if (string.IsNullOrWhiteSpace(cbbCodeTemplete.SelectedItem.ToString())) {
+                MessageBox.Show("模板不能为空");
+                return;
+            }
+            var templete = CodeTempleteSchemeList.Where(c => c.Name == cbbCodeTemplete.SelectedItem.ToString()).FirstOrDefault();
+            if (templete == null)
+            {
+                MessageBox.Show("模板不能为空");
+                return;
+            }
+            var templetedir = new DirectoryInfo(templete.Path);
+            if (!templetedir.Exists)
+            {
+                MessageBox.Show("模板文件夹不存在");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(cbbCodeDataSource.SelectedItem.ToString()))
+            {
+                MessageBox.Show("数据源不能为空");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(cbbCodeDataTable.SelectedItem.ToString()))
+            {
+                MessageBox.Show("表不能为空");
+                return;
+            }
+            var selfReplace = tbxCodeOther.Text.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(c => c.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries));
+            if (selfReplace.Where(c => c.Count() != 2).Count() > 0)
+            {
+                MessageBox.Show("其他替换内容有误");
+                return;
+            }
+            #endregion
+
+            #region 执行
+            dbHelperoper=new DBHelper(dataSourceList[cbbCodeDataSource.SelectedItem.ToString()].Item1, connectType[dataSourceList[cbbCodeDataSource.SelectedItem.ToString()].Item2]);
+            var columninfo = dbHelperoper.ExecuteTable(string.Format(GetColumnsSearchSql(dataSourceList[cbbCodeDataSource.SelectedItem.ToString()].Item2), cbbCodeDataTable.SelectedItem.ToString()));
+            ExecuteCodeTempleteDir(templetedir, new DirectoryInfo($"{deskPath}\\{DateTime.Now.ToString("yyMMddHHmmss")}")
+                , selfReplace, columninfo);
+            #endregion
+        }
+        #endregion
+
+        #region 生成代码模板文件夹
+        /// <summary>
+        /// 生成代码模板文件夹
+        /// </summary>
+        /// <param name="fromDir"></param>
+        /// <param name="toDir"></param>
+        private void ExecuteCodeTempleteDir(DirectoryInfo fromDir, DirectoryInfo toDir, IEnumerable<string[]> selfReplace, DataTable columnInfo)
+        {
+            //创建文件夹
+            if (!toDir.Exists)
+                toDir.Create();
+            foreach (var file in fromDir.GetFiles())
+            {
+                FileStreamHelper.SaveText(toDir.FullName
+                , ReplaceCodeTempleteText(file.Name, selfReplace)//替换文件名中的其他替换内容
+                , ReplaceCodeTempleteColumn(ReplaceCodeTempleteText(FileStreamHelper.ReadText(file.FullName), selfReplace), columnInfo));//替换文件正文中的其他替换内容和字段信息
+            }
+            foreach (var dir in fromDir.GetDirectories())
+            {
+                ExecuteCodeTempleteDir(dir, new DirectoryInfo($"{toDir.FullName}\\{ReplaceCodeTempleteText(dir.Name, selfReplace)}"), selfReplace, columnInfo);//递归生成子文件夹
+            }
+        }
+        #endregion
+
+        #region 替换代码模板字段
+        /// <summary>
+        /// 替换代码模板字段
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="columnInfo"></param>
+        /// <returns></returns>
+        private string ReplaceCodeTempleteColumn(string source, DataTable columnInfo)
+        {
+            while (source.IndexOf("[FieldStart]") > -1) {
+                var start = source.IndexOf("[FieldStart]");
+                var end = source.IndexOf("[FieldEnd]");
+                var content = source.Substring(start + 12, end - start - 12);
+                var resultList = columnInfo.AsEnumerable().Select(c => content.Replace("[FieldTitle]", c["name"].ToString()).Replace("[FieldName]", c["name"].ToString()));
+
+                source = $"{source.Substring(0, start)}{string.Join("\r\n", resultList)}{source.Substring(end + 10)}";
+            }
+            source = source.Replace("[FieldCount]", columnInfo.Rows.Count.ToString());
+            return source;
+        }
+        #endregion
+
+        #region 替换代码模板文本
+        /// <summary>
+        /// 替换代码模板文本
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="selfReplace"></param>
+        /// <returns></returns>
+        private string ReplaceCodeTempleteText(string source, IEnumerable<string[]> selfReplace)
+        {
+            foreach (var item in selfReplace)
+            {
+                source = source.Replace(item[0], item[1]);
+            }
+            return source;
         }
         #endregion
         #endregion
@@ -1255,6 +1376,19 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
         }
         #endregion
         #endregion
+
+        #region 代码生成属性
+        #region 代码生成方案
+        /// <summary>
+        /// 代码生成方案
+        /// </summary>
+        private List<CodeTempleteScheme> CodeTempleteSchemeList
+        {
+            get;
+            set;
+        }
+        #endregion
+        #endregion
         #endregion
 
         #region 公共函数
@@ -1270,6 +1404,7 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
             SourceListTo.Items.Clear();
             OperatorSourcesList.Items.Clear();
             cbbOutputDataSet.Items.Clear();
+            cbbCodeDataSource.Items.Clear();
             dataSourceList.Clear();
             foreach (XmlNode node in list)
             {
@@ -1278,7 +1413,8 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
                 SourceListTo.Items.Add(ele.GetAttribute("Name"));
                 OperatorSourcesList.Items.Add(ele.GetAttribute("Name"));
                 cbbOutputDataSet.Items.Add(ele.GetAttribute("Name"));
-                dataSourceList.Add(ele.GetAttribute("Name"), ele.InnerText);
+                cbbCodeDataSource.Items.Add(ele.GetAttribute("Name"));
+                dataSourceList.Add(ele.GetAttribute("Name"), new Tuple<string, string>(ele.InnerText, string.IsNullOrWhiteSpace(ele.GetAttribute("Type")) ? "SqlServer" : ele.GetAttribute("Type")));
             }
         }
         #endregion
@@ -1352,8 +1488,8 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
             }
             if (ConfigTree.Nodes.Count > 0)
             {
-                this.tbxConfigName.Text = ConfigTree.Nodes[0].Text;
-                this.ConfigTree.SelectedNode = ConfigTree.Nodes[0];
+                tbxConfigName.Text = ConfigTree.Nodes[0].Text;
+                ConfigTree.SelectedNode = ConfigTree.Nodes[0];
             }
         }
         #endregion
@@ -1384,10 +1520,10 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
             if (OutputList.Items.Count > 0)
             {
                 XmlElement ele = (XmlElement)list[0];
-                this.tbxOutputName.Text = ele.GetAttribute("Name");
-                this.tbxOutputTableName.Text = ele.GetAttribute("Table");
-                this.cbbOutputDataSet.Text = ele.GetAttribute("DataBase");
-                this.OutputList.SetSelected(0, true);
+                tbxOutputName.Text = ele.GetAttribute("Name");
+                tbxOutputTableName.Text = ele.GetAttribute("Table");
+                cbbOutputDataSet.Text = ele.GetAttribute("DataBase");
+                OutputList.SetSelected(0, true);
             }
         }
 
@@ -1420,10 +1556,30 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
             if (OutputList.Items.Count > 0)
             {
                 XmlElement ele = (XmlElement)list[selectedindex];
-                this.tbxOutputName.Text = ele.GetAttribute("Name");
-                this.tbxOutputTableName.Text = ele.GetAttribute("Table");
-                this.cbbOutputDataSet.Text = ele.GetAttribute("DataBase");
-                this.OutputList.SetSelected(selectedindex, true);
+                tbxOutputName.Text = ele.GetAttribute("Name");
+                tbxOutputTableName.Text = ele.GetAttribute("Table");
+                cbbOutputDataSet.Text = ele.GetAttribute("DataBase");
+                OutputList.SetSelected(selectedindex, true);
+            }
+        }
+        #endregion
+
+        #region 初始化代码生成器方案
+        public void LoadCodeScheme()
+        {
+            cbbCodeTemplete.Items.Clear();
+            CodeTempleteSchemeList = new List<CodeTempleteScheme>();
+            docoper = new XmlHelper(string.Format("{0}{1}", Application.StartupPath, dataSetConfigPath), XmlType.Path);
+            XmlNodeList list = docoper.QueryNodes("/Base/CodeTemplete/Item");
+            foreach (XmlNode node in list)
+            {
+                XmlElement ele = (XmlElement)node;
+                cbbCodeTemplete.Items.Add(ele.GetAttribute("Name"));
+                CodeTempleteSchemeList.Add(new CodeTempleteScheme()
+                {
+                    Name = ele.GetAttribute("Name"),
+                    Path = ele.GetAttribute("Path"),
+                });
             }
         }
         #endregion
@@ -1449,7 +1605,7 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
 
 /***查询目标数据中的差异记录***/
 {1}
-", SqlHelper.CreateSearchSql(dataSourceList[DataSetFrom], TableFrom, "dbo", consuit.ToArray()), SqlHelper.CreateSearchSql(dataSourceList[DataSetTo], TableTo, "dbo", target.ToArray()));
+", SqlHelper.CreateSearchSql(dataSourceList[DataSetFrom].Item1, TableFrom, "dbo", consuit.ToArray()), SqlHelper.CreateSearchSql(dataSourceList[DataSetTo].Item1, TableTo, "dbo", target.ToArray()));
             }
 
             if (cbxInsert.Checked)
@@ -1481,16 +1637,16 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
         private string DoStructDiffExecute(string fromtable, string totable)
         {
             //目标表中与原始表有差异的字段
-            IEnumerable<DataRow> targetdif = DataCompareHelper.QueryDiffRows(dataSourceList[DataSetFrom], "syscolumns", providerName, string.Format("id=object_id('{0}')", fromtable), dataSourceList[DataSetTo], "syscolumns", providerName, string.Format("id=object_id('{0}')", totable), "name,xtype,length,xprec,xscale", "name");
+            IEnumerable<DataRow> targetdif = DataCompareHelper.QueryDiffRows(dataSourceList[DataSetFrom].Item1, "syscolumns", dataSourceList[DataSetFrom].Item2, string.Format("id=object_id('{0}')", fromtable), dataSourceList[DataSetTo].Item1, "syscolumns", dataSourceList[DataSetTo].Item2, string.Format("id=object_id('{0}')", totable), "name,xtype,length,xprec,xscale", "name");
             //原始表中与目标表有差异的字段
-            IEnumerable<DataRow> sourcedif = DataCompareHelper.QueryDiffRows(dataSourceList[DataSetTo], "syscolumns", providerName, string.Format("id=object_id('{0}')", totable), dataSourceList[DataSetFrom], "syscolumns", providerName, string.Format("id=object_id('{0}')", fromtable), "name,xtype,length,xprec,xscale", "name");
+            IEnumerable<DataRow> sourcedif = DataCompareHelper.QueryDiffRows(dataSourceList[DataSetTo].Item1, "syscolumns", dataSourceList[DataSetTo].Item2, string.Format("id=object_id('{0}')", totable), dataSourceList[DataSetFrom].Item1, "syscolumns", dataSourceList[DataSetFrom].Item2, string.Format("id=object_id('{0}')", fromtable), "name,xtype,length,xprec,xscale", "name");
 
-            DBHelper dbfrom = new DBHelper(dataSourceList[DataSetFrom], providerName);
-            DBHelper dbto = new DBHelper(dataSourceList[DataSetTo], providerName);
+            DBHelper dbfrom = new DBHelper(dataSourceList[DataSetFrom].Item1, connectType[dataSourceList[DataSetFrom].Item2]);
+            DBHelper dbto = new DBHelper(dataSourceList[DataSetTo].Item1, connectType[ dataSourceList[DataSetTo].Item2]);
             //所有原始表的字段
-            var columnsFrom = dbfrom.ExecuteTable(string.Format(columnSearchSql, fromtable)).AsEnumerable();
+            var columnsFrom = dbfrom.ExecuteTable(string.Format(GetColumnsSearchSql(dataSourceList[DataSetFrom].Item2), fromtable)).AsEnumerable();
             //所有目标表的字段
-            var columnsTo = dbto.ExecuteTable(string.Format(columnSearchSql, totable)).AsEnumerable();
+            var columnsTo = dbto.ExecuteTable(string.Format(GetColumnsSearchSql(dataSourceList[DataSetTo].Item2), totable)).AsEnumerable();
             //存在于原始表，但不存在与目标表的字段
             var sourceonly = from sd in sourcedif
                              join ct in columnsTo
@@ -1550,7 +1706,7 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
                 foreach (var item in dataSources)
                 {
                     dbHelperoper = new DBHelper(item, providerName);
-                    DbDataReader reader = DBOper.ExecuteReader(tableSearchSql);
+                    DbDataReader reader = DBOper.ExecuteReader(tableSearchSql[0]);
                     List<string> names = new List<string>();
                     while (reader.Read())
                     {
@@ -1767,12 +1923,12 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
             if (ipschemes.Count() == 1)
             {
                 var ipscheme = ipschemes.Single();
-                this.tbxIPName.Text = ipscheme.Name;
-                this.tbxIPAddress.Text = ipscheme.IPAddress;
-                this.tbxSubNetMask.Text = ipscheme.SubNetMask;
-                this.tbxDefaultIPGateWay.Text = ipscheme.DefaultIPGateway;
-                this.tbxDNSServerSearchOrder.Text = ipscheme.DNSServerSearchOrder;
-                this.tbxDNSServerSpare.Text = ipscheme.DNSServerSpare;
+                tbxIPName.Text = ipscheme.Name;
+                tbxIPAddress.Text = ipscheme.IPAddress;
+                tbxSubNetMask.Text = ipscheme.SubNetMask;
+                tbxDefaultIPGateWay.Text = ipscheme.DefaultIPGateway;
+                tbxDNSServerSearchOrder.Text = ipscheme.DNSServerSearchOrder;
+                tbxDNSServerSpare.Text = ipscheme.DNSServerSpare;
             }
         }
         #endregion
@@ -1788,11 +1944,30 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
             if (outputschemes.Count() == 1)
             {
                 var outputscheme = outputschemes.Single();
-                this.tbxOutputName.Text = outputscheme.Name;
-                this.tbxOutputTableName.Text = outputscheme.Table;
-                this.tbxOutputSql.Text = outputscheme.Select;
-                this.tbxOutputDelete.Text = outputscheme.Delete;
-                this.cbbOutputDataSet.Text = outputscheme.DataBase;
+                tbxOutputName.Text = outputscheme.Name;
+                tbxOutputTableName.Text = outputscheme.Table;
+                tbxOutputSql.Text = outputscheme.Select;
+                tbxOutputDelete.Text = outputscheme.Delete;
+                cbbOutputDataSet.Text = outputscheme.DataBase;
+            }
+        }
+
+        private void cbbCodeDataSource_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                dbHelperfrom = new DBHelper(dataSourceList[cbbCodeDataSource.SelectedItem.ToString()].Item1, connectType[dataSourceList[cbbCodeDataSource.SelectedItem.ToString()].Item2]);
+                DbDataReader reader = DBFrom.ExecuteReader(GetTableNamesSearchSql(dataSourceList[cbbCodeDataSource.SelectedItem.ToString()].Item2));
+                cbbCodeDataTable.Items.Clear();
+                while (reader.Read())
+                {
+                    cbbCodeDataTable.Items.Add(reader.Get<string>("Name"));
+                }
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
         #endregion
@@ -1815,6 +1990,29 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
         /// <param name="ConnName">数据库连接名称</param>
         private void ClearDataLog(string ConnName)
         { }
+        #endregion
+
+        #region 获取表结构查询sql
+        private string GetTableNamesSearchSql(string provider) {
+            switch (provider) {
+                case "SqlServer":
+                    return tableSearchSql[0];
+                case "MySql":
+                    return tableSearchSql[1];
+            }
+            return "";
+        }
+        private string GetColumnsSearchSql(string provider)
+        {
+            switch (provider)
+            {
+                case "SqlServer":
+                    return columnSearchSql[0];
+                case "MySql":
+                    return columnSearchSql[1];
+            }
+            return "";
+        }
         #endregion
         #endregion
     }
@@ -1848,6 +2046,16 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
     struct OutputScheme
     {
         public string Name, Table, DataBase, Select, Delete;
+    }
+    #endregion
+
+    #region 代码生成方案
+    /// <summary>
+    /// 代码生成方案
+    /// </summary>
+    class CodeTempleteScheme
+    {
+        public string Name, Path;
     }
     #endregion
     #endregion

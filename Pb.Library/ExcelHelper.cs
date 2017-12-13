@@ -1,10 +1,6 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Diagnostics;
-using System.Configuration;
 using System.Data.OleDb;
 using System.Data;
 
@@ -23,7 +19,7 @@ namespace Pb.Library
 
         public ExcelHelper(string filePath)
         {
-            this._FilePath = filePath;
+            _FilePath = filePath;
             string strQueryConn = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + _FilePath + "';User ID=Admin;Mode=Share Deny None;Extended Properties='Excel 12.0 xml;HDR=No;IMEX=1'";
             string strAlterConn = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + _FilePath + "';User ID=Admin;Mode=Share Deny None;Extended Properties='Excel 12.0 xml;HDR=No;IMEX=0'";
             //修改连接Excel的字符串，根据判断不同后缀名来使用不同的连接字符串

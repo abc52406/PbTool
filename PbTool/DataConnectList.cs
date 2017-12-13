@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Drawing;
 using System.Windows.Forms;
 using System.Xml;
 using Pb.Library;
@@ -29,7 +28,7 @@ namespace PbTool
         {
             get
             {
-                return this.DataName.Text.Trim();
+                return DataName.Text.Trim();
             }
         }
 
@@ -40,7 +39,18 @@ namespace PbTool
         {
             get
             {
-                return this.DataConnect.Text.Trim();
+                return DataConnect.Text.Trim();
+            }
+        }
+
+        /// <summary>
+        /// 连接类型
+        /// </summary>
+        private string ConnectType
+        {
+            get
+            {
+                return cbbConnectType.SelectedItem.ToString();
             }
         }
         #endregion
@@ -60,24 +70,25 @@ namespace PbTool
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            MainForm form = (MainForm)this.Owner;
+            MainForm form = (MainForm)Owner;
             form.RefreshDataSources();
-            this.Dispose();
+            Dispose();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(this.DataName.Text))
+            if (!string.IsNullOrEmpty(DataName.Text))
             {
-                if (oper.Exist(string.Format("/Base/DataConnections/Connection[@Name='{0}']", this.ConnectName)))
-                    MessageBox.Show(string.Format("已存在名称为（{0}）的数据源", this.ConnectName));
+                if (oper.Exist(string.Format("/Base/DataConnections/Connection[@Name='{0}']", ConnectName)))
+                    MessageBox.Show(string.Format("已存在名称为（{0}）的数据源", ConnectName));
                 else
                 {
                     XmlElement ele = oper.Doc.CreateElement("Connection");
-                    ele.SetAttribute("Name", this.ConnectName);
-                    ele.InnerText = this.ConnectString;
+                    ele.SetAttribute("Name", ConnectName);
+                    ele.SetAttribute("Type", ConnectType);
+                    ele.InnerText = ConnectString;
                     oper.AddEle(ele, "/Base/DataConnections");
-                    this.RefreshList();
+                    RefreshList();
                 }
             }
             else
@@ -86,47 +97,54 @@ namespace PbTool
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            TreeNode node=this.DataTree.SelectedNode;
-            if (node != null&&!string.IsNullOrEmpty(this.ConnectName))
+            TreeNode node= DataTree.SelectedNode;
+            if (node != null&&!string.IsNullOrEmpty(ConnectName))
             {
-                if (this.ConnectName == this.DataTree.SelectedNode.Name)
+                if (ConnectName == DataTree.SelectedNode.Name)
                 {
-                    XmlElement ele = oper.QueryEle(string.Format("/Base/DataConnections/Connection[@Name='{0}']", this.ConnectName));
-                    ele.InnerText = this.ConnectString;
+                    XmlElement ele = oper.QueryEle(string.Format("/Base/DataConnections/Connection[@Name='{0}']", ConnectName));
+                    ele.SetAttribute("Type", ConnectType);
+                    ele.InnerText = ConnectString;
                     oper.Save();
-                    this.RefreshList();
+                    RefreshList();
                 }
-                else if (oper.Exist(string.Format("/Base/DataConnections/Connection[@Name='{0}']", this.ConnectName)))
+                else if (oper.Exist(string.Format("/Base/DataConnections/Connection[@Name='{0}']", ConnectName)))
                 {
-                    MessageBox.Show(string.Format("已存在名称为（{0}）的数据源", this.ConnectName));
+                    MessageBox.Show(string.Format("已存在名称为（{0}）的数据源", ConnectName));
                 }
                 else
                 {
-                    XmlElement ele = oper.QueryEle(string.Format("/Base/DataConnections/Connection[@Name='{0}']", this.DataTree.SelectedNode.Name));
-                    ele.SetAttribute("Name", this.ConnectName);
-                    ele.InnerText = this.ConnectString;
+                    XmlElement ele = oper.QueryEle(string.Format("/Base/DataConnections/Connection[@Name='{0}']", DataTree.SelectedNode.Name));
+                    ele.SetAttribute("Name", ConnectName);
+                    ele.SetAttribute("Type", ConnectType);
+                    ele.InnerText = ConnectString;
                     oper.Save();
-                    this.RefreshList();
+                    RefreshList();
                 }
             }
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            TreeNode node = this.DataTree.SelectedNode;
+            TreeNode node = DataTree.SelectedNode;
             if (node != null)
             {
-                oper.DeleteNode(string.Format("/Base/DataConnections/Connection[@Name='{0}']", this.DataTree.SelectedNode.Name));
-                this.RefreshList();
+                oper.DeleteNode(string.Format("/Base/DataConnections/Connection[@Name='{0}']", DataTree.SelectedNode.Name));
+                RefreshList();
             }
         }
 
         private void DataTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            this.DataName.Text = this.DataTree.SelectedNode.Name;
-            XmlElement ele = oper.QueryEle(string.Format("/Base/DataConnections/Connection[@Name='{0}']", this.ConnectName));
-            if (ele != null)
-                this.DataConnect.Text = ele.InnerText;
+            DataName.Text = DataTree.SelectedNode.Name;
+            XmlElement ele = oper.QueryEle(string.Format("/Base/DataConnections/Connection[@Name='{0}']", ConnectName));
+            if (ele != null) {
+                DataConnect.Text = ele.InnerText;
+                if (string.IsNullOrWhiteSpace(ele.GetAttribute("Type")))
+                    cbbConnectType.SelectedItem = "SqlServer";
+                else
+                    cbbConnectType.SelectedItem = ele.GetAttribute("Type");
+            }
         }
         #endregion
 
@@ -136,7 +154,7 @@ namespace PbTool
         /// </summary>
         private void RefreshList()
         {
-            this.DataTree.Nodes.Clear();
+            DataTree.Nodes.Clear();
 
             XmlNodeList list = oper.QueryNodes("/Base/DataConnections/Connection");
 
@@ -144,7 +162,7 @@ namespace PbTool
             {
                 foreach (XmlNode node in list)
                 {
-                    this.DataTree.Nodes.Add(((XmlElement)node).GetAttribute("Name"),((XmlElement)node).GetAttribute("Name"));
+                    DataTree.Nodes.Add(((XmlElement)node).GetAttribute("Name"),((XmlElement)node).GetAttribute("Name"));
                 }
             }
         }

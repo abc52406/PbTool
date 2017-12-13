@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Diagnostics;
 
@@ -26,7 +24,7 @@ namespace Pb.Library
         /// <param name="threadingDic">线程任务队列</param>
         public ThreadingHelper(Dictionary<int, IBaseThreading> threadingDic)
         {
-            this.cputhreadings = threadingDic;
+            cputhreadings = threadingDic;
         }
 
         /// <summary>
@@ -34,7 +32,7 @@ namespace Pb.Library
         /// </summary>
         public ThreadingHelper()
         {
-            this.cputhreadings = new Dictionary<int, IBaseThreading>();
+            cputhreadings = new Dictionary<int, IBaseThreading>();
         }
         #endregion
 

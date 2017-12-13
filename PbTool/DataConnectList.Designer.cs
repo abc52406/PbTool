@@ -37,6 +37,8 @@
             this.btnEdit = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cbbConnectType = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // DataTree
@@ -75,7 +77,7 @@
             // 
             // DataConnect
             // 
-            this.DataConnect.Location = new System.Drawing.Point(265, 77);
+            this.DataConnect.Location = new System.Drawing.Point(265, 111);
             this.DataConnect.Multiline = true;
             this.DataConnect.Name = "DataConnect";
             this.DataConnect.Size = new System.Drawing.Size(160, 226);
@@ -84,7 +86,7 @@
             // lblContent
             // 
             this.lblContent.AutoSize = true;
-            this.lblContent.Location = new System.Drawing.Point(197, 80);
+            this.lblContent.Location = new System.Drawing.Point(197, 114);
             this.lblContent.Name = "lblContent";
             this.lblContent.Size = new System.Drawing.Size(65, 12);
             this.lblContent.TabIndex = 4;
@@ -113,7 +115,7 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(279, 348);
+            this.btnCancel.Location = new System.Drawing.Point(279, 377);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(67, 23);
             this.btnCancel.TabIndex = 9;
@@ -121,12 +123,35 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(197, 77);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(29, 12);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "类型";
+            // 
+            // cbbConnectType
+            // 
+            this.cbbConnectType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbConnectType.FormattingEnabled = true;
+            this.cbbConnectType.Items.AddRange(new object[] {
+            "SqlServer",
+            "MySql"});
+            this.cbbConnectType.Location = new System.Drawing.Point(265, 74);
+            this.cbbConnectType.Name = "cbbConnectType";
+            this.cbbConnectType.Size = new System.Drawing.Size(160, 20);
+            this.cbbConnectType.TabIndex = 26;
+            // 
             // DataConnectList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(450, 428);
+            this.ClientSize = new System.Drawing.Size(450, 427);
+            this.Controls.Add(this.cbbConnectType);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnEdit);
@@ -158,5 +183,7 @@
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cbbConnectType;
     }
 }

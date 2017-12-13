@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
 using System.Data.Common;
@@ -50,16 +48,16 @@ namespace Pb.Library
                 throw new ConfigurationException(string.Format(
                     "找不到指定数据库连接名称({0})的配置信息", connName));
 
-            this._ProviderName = settings.ProviderName;
-            this._ConnectionString = settings.ConnectionString;
-            this._Connection = CreateConnection(_ConnectionString, _ProviderName);
+            _ProviderName = settings.ProviderName;
+            _ConnectionString = settings.ConnectionString;
+            _Connection = CreateConnection(_ConnectionString, _ProviderName);
         }
 
         public DBHelper(string connectionString, string providerName)
         {
-            this._ProviderName = providerName;
-            this._ConnectionString = connectionString;
-            this._Connection = CreateConnection(_ConnectionString, _ProviderName);
+            _ProviderName = providerName;
+            _ConnectionString = connectionString;
+            _Connection = CreateConnection(_ConnectionString, _ProviderName);
         }
         #endregion
 
@@ -75,7 +73,7 @@ namespace Pb.Library
 
             DbConnection dbconn = dbfactory.CreateConnection();
             dbconn.ConnectionString = connectionString;
-            this._DataBaseName = dbconn.Database;
+            _DataBaseName = dbconn.Database;
             return dbconn;
         }
         #endregion

@@ -1089,7 +1089,7 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
                 var start = source.IndexOf("[FieldStart]");
                 var end = source.IndexOf("[FieldEnd]");
                 var content = source.Substring(start + 12, end - start - 12);
-                var resultList = columnInfo.AsEnumerable().Select(c => content.Replace("[FieldTitle]", c["name"].ToString()).Replace("[FieldName]", c["name"].ToString()));
+                var resultList = columnInfo.AsEnumerable().Select((c,i) => content.Replace("[FieldTitle]", c["name"].ToString()).Replace("[FieldName]", c["name"].ToString()).Replace("[FieldIndex]", i.ToString()));
 
                 source = $"{source.Substring(0, start)}{string.Join("\r\n", resultList)}{source.Substring(end + 10)}";
             }

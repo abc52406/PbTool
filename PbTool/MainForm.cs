@@ -1048,6 +1048,7 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
             var columninfo = dbHelperoper.ExecuteTable(string.Format(GetColumnsSearchSql(dataSourceList[cbbCodeDataSource.SelectedItem.ToString()].Item2), cbbCodeDataTable.SelectedItem.ToString()));
             ExecuteCodeTempleteDir(templetedir, new DirectoryInfo($"{deskPath}\\{DateTime.Now.ToString("yyMMddHHmmss")}")
                 , selfReplace, columninfo);
+            MessageBox.Show("生成成功");
             #endregion
         }
         #endregion

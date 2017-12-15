@@ -869,6 +869,7 @@
             this.cbbCodeTemplete.Name = "cbbCodeTemplete";
             this.cbbCodeTemplete.Size = new System.Drawing.Size(550, 20);
             this.cbbCodeTemplete.TabIndex = 17;
+            this.cbbCodeTemplete.SelectedIndexChanged += new System.EventHandler(this.cbbCodeTemplete_SelectedIndexChanged);
             // 
             // label6
             // 

@@ -1000,6 +1000,45 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
         #endregion
 
         #region 代码生成器
+        #region 切换模板
+        /// <summary>
+        /// 切换模板
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cbbCodeTemplete_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                var templete = CodeTempleteSchemeList.Where(c => c.Name == cbbCodeTemplete.SelectedItem.ToString()).FirstOrDefault();
+                tbxCodeOther.Text = templete?.Replace;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        #endregion
+        
+        private void cbbCodeDataSource_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                dbHelperfrom = new DBHelper(dataSourceList[cbbCodeDataSource.SelectedItem.ToString()].Item1, connectType[dataSourceList[cbbCodeDataSource.SelectedItem.ToString()].Item2]);
+                DbDataReader reader = DBFrom.ExecuteReader(GetTableNamesSearchSql(dataSourceList[cbbCodeDataSource.SelectedItem.ToString()].Item2));
+                cbbCodeDataTable.Items.Clear();
+                while (reader.Read())
+                {
+                    cbbCodeDataTable.Items.Add(reader.Get<string>("Name"));
+                }
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
         #region 执行代码生成
         /// <summary>
         /// 执行代码生成
@@ -1090,7 +1129,7 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
                 var start = source.IndexOf("[FieldStart]");
                 var end = source.IndexOf("[FieldEnd]");
                 var content = source.Substring(start + 12, end - start - 12);
-                var resultList = columnInfo.AsEnumerable().Select((c,i) => content.Replace("[FieldTitle]", c["name"].ToString()).Replace("[FieldName]", c["name"].ToString()).Replace("[FieldIndex]", i.ToString()));
+                var resultList = columnInfo.AsEnumerable().Select((c, i) => content.Replace("[FieldTitle]", c["name"].ToString()).Replace("[FieldName]", c["name"].ToString()).Replace("[fieldName]", LowerCamelString(c["name"].ToString())).Replace("[FieldIndex]", i.ToString()));
 
                 source = $"{source.Substring(0, start)}{string.Join("\r\n", resultList)}{source.Substring(end + 10)}";
             }
@@ -1580,6 +1619,7 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
                 {
                     Name = ele.GetAttribute("Name"),
                     Path = ele.GetAttribute("Path"),
+                    Replace = ele.InnerText,
                 });
             }
         }
@@ -1952,25 +1992,6 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
                 cbbOutputDataSet.Text = outputscheme.DataBase;
             }
         }
-
-        private void cbbCodeDataSource_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                dbHelperfrom = new DBHelper(dataSourceList[cbbCodeDataSource.SelectedItem.ToString()].Item1, connectType[dataSourceList[cbbCodeDataSource.SelectedItem.ToString()].Item2]);
-                DbDataReader reader = DBFrom.ExecuteReader(GetTableNamesSearchSql(dataSourceList[cbbCodeDataSource.SelectedItem.ToString()].Item2));
-                cbbCodeDataTable.Items.Clear();
-                while (reader.Read())
-                {
-                    cbbCodeDataTable.Items.Add(reader.Get<string>("Name"));
-                }
-                reader.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
         #endregion
 
         #region 保存文件到桌面
@@ -1991,6 +2012,14 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
         /// <param name="ConnName">数据库连接名称</param>
         private void ClearDataLog(string ConnName)
         { }
+        #endregion
+
+        #region 转换小驼峰字符串
+        private string LowerCamelString(string val) {
+            if (!string.IsNullOrEmpty(val))
+                return $"{val.Substring(0, 1).ToLower()}{val.Substring(1)}";
+            return val;
+        }
         #endregion
 
         #region 获取表结构查询sql
@@ -2056,7 +2085,7 @@ ALTER DATABASE {0} SET RECOVERY FULL   -- 还原为完全模式 ", db.DataBaseNa
     /// </summary>
     class CodeTempleteScheme
     {
-        public string Name, Path;
+        public string Name, Path, Replace;
     }
     #endregion
     #endregion
